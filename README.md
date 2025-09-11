@@ -1,4 +1,4 @@
-# 🛒 Auction Site
+# 🛒 Sitio de Subastas
 
 [![Django](https://img.shields.io/badge/Django-5.1.2-green.svg)](https://www.djangoproject.com/)
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
@@ -7,282 +7,286 @@
 [![Mobile Responsive](https://img.shields.io/badge/Mobile-Responsive-orange.svg)](https://getbootstrap.com/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
 
-## 📋 Overview
+## 📋 Descripción General
 
-Auction Site is a comprehensive web application that enables users to participate in online auctions. Built with Django, the platform provides a seamless experience for creating auction listings, placing competitive bids, and engaging with other users through comments and watchlists. The application features a responsive design that works across desktop and mobile devices, with carefully crafted UI components and a modern user experience.
+**Sitio de Subastas** es una aplicación web completa que permite a los usuarios participar en subastas en línea. Construida con Django, la plataforma ofrece una experiencia fluida para crear listas de subastas, realizar ofertas competitivas e interactuar con otros usuarios a través de comentarios y listas de seguimiento. La aplicación cuenta con un diseño responsivo que funciona en dispositivos de escritorio y móviles, con componentes de interfaz de usuario cuidadosamente diseñados y una experiencia de usuario moderna.
 
-## ✨ Live Demo
+## ✨ Demo en Vivo
 
-🔗 [View Live Demo](https://auction-site-demo.herokuapp.com) (Replace with your actual deployment URL)
+🔗 [Ver Demo en Vivo](https://auction-site-demo.herokuapp.com) (Reemplazar con la URL de despliegue real)
 
-## 📱 Screenshots
+---
 
-### Desktop View
+## 🚀 Características Principales
 
-![Desktop View](/static//desktop-edmo.png)
+### 🔐 Autenticación de Usuarios
 
-### Mobile View
+-   **Registro, inicio de sesión y cierre de sesión seguros.**
+-   **Navegación dinámica** basada en el estado de autenticación.
+-   Gestión de perfiles de usuario.
+-   Protección de contraseñas y medidas de seguridad.
 
-![Mobile View](/static/mobile-demo.png)
+### 📝 Gestión de Anuncios
 
-## 🚀 Features
+-   Crea anuncios de subasta detallados con:
+    -   Título y descripción.
+    -   Monto de la oferta inicial.
+    -   URL de imagen opcional.
+    -   Selección de categoría opcional.
+-   Control del estado de los anuncios (activos/inactivos).
+-   Formularios intuitivos con validación.
 
-### 🔐 User Authentication
+### 🏠 Página de Anuncios Activos
 
--   Secure registration, login, and logout functionality
--   Dynamic navigation based on authentication status
--   User profile management
--   Password protection and security measures
+-   Navega por todas las subastas actualmente activas.
+-   Visualiza los detalles esenciales de los anuncios de un vistazo.
+-   Filtra los anuncios por categorías.
+-   Diseño de tarjetas responsivo para todos los tamaños de dispositivo.
 
-### 📝 Listing Management
+### 📊 Páginas de Anuncios Detallados
 
--   Create detailed auction listings with:
-    -   Title and description
-    -   Starting bid amount
-    -   Optional image URL
-    -   Optional category selection
--   Active/inactive listing status control
--   Intuitive forms with validation
+-   Visualización de información completa del anuncio.
+-   Oferta actual e historial de ofertas.
+-   Sección de comentarios de los usuarios.
+-   Botones de gestión de la lista de seguimiento.
+-   Funcionalidad de puja con validación.
+-   Mecanismo de cierre de subasta para los propietarios de los anuncios.
+-   Notificaciones al ganador.
 
-### 🏠 Active Listings Page
+### ⭐ Lista de Seguimiento
 
--   Browse all currently active auctions
--   View essential listing details at a glance
--   Filter listings by categories
--   Responsive card layout for all device sizes
+-   Colección personalizada de artículos de interés.
+-   Funcionalidad de añadir/eliminar con un solo clic.
+-   Acceso rápido a los artículos seguidos.
+-   Indicadores visuales para los artículos seguidos.
 
-### 📊 Detailed Listing Pages
+### 🏷️ Categorías
 
--   Comprehensive listing information display
--   Current bid and bidding history
--   User comments section
--   Watchlist management buttons
--   Bidding functionality with validation
--   Auction closing mechanism for listing owners
--   Winner notifications
+-   Categorías de anuncios organizadas.
+-   Filtra los anuncios por categorías específicas.
+-   Navega por todas las categorías disponibles.
+-   Páginas específicas por categoría.
 
-### ⭐ Watchlist
+### 💬 Comentarios
 
--   Personalized collection of interesting items
--   One-click add/remove functionality
--   Quick access to watched items
--   Visual indicators for watched items
+-   Deja comentarios en cualquier anuncio.
+-   Visualiza todos los comentarios de los anuncios.
+-   Interacción con la comunidad.
+-   Información de autor y marca de tiempo.
 
-### 🏷️ Categories
+### ⚙️ Interfaz de Administración
 
--   Organized listing categories
--   Filter listings by specific categories
--   Browse all available categories
--   Category-specific pages
+-   Panel de control de gestión integral.
+-   Control sobre todos los anuncios, ofertas y comentarios.
+-   Capacidades de gestión de usuarios.
+-   Funcionalidad de filtrado y búsqueda de datos.
 
-### 💬 Comments
+---
 
--   Leave comments on any listing
--   View all comments on listings
--   Community interaction
--   Timestamp and author information
+## 🛠️ Tecnologías Utilizadas
 
-### ⚙️ Admin Interface
+-   **Backend**: [Django](https://www.djangoproject.com/) (Python) - Framework web robusto.
+-   **Frontend**: HTML, CSS, [Bootstrap](https://getbootstrap.com/) - Diseño responsivo.
+-   **Base de Datos**: SQLite (desarrollo), PostgreSQL (listo para producción).
+-   **Autenticación**: Sistema de autenticación incorporado de Django.
+-   **Estilos**: CSS personalizado con diseño responsivo, iconos de Font Awesome.
+-   **Despliegue**: Soporte para contenedores Docker.
+-   **Control de Versiones**: Git.
+-   **Diseño Responsivo**: Media queries y sistema de rejilla de Bootstrap.
+-   **Componentes de UI**: Tarjetas, navegación, formularios y alertas personalizadas.
 
--   Comprehensive management dashboard
--   Control over all listings, bids, and comments
--   User management capabilities
--   Data filtering and search functionality
+---
 
-## 🛠️ Technologies Used
+## 🔧 Instalación y Configuración
 
--   **Backend**: [Django](https://www.djangoproject.com/) (Python) - Robust web framework
--   **Frontend**: HTML, CSS, [Bootstrap](https://getbootstrap.com/) - Responsive design
--   **Database**: SQLite (development), PostgreSQL (production-ready)
--   **Authentication**: Django's built-in authentication system
--   **Styling**: Custom CSS with responsive design, Font Awesome icons
--   **Deployment**: Docker container support
--   **Version Control**: Git
--   **Responsive Design**: Media queries and Bootstrap grid system
--   **UI Components**: Custom cards, navigation, forms, and alerts
+### Prerrequisitos
 
-## 🔧 Installation & Setup
+-   Python 3.10 o superior.
+-   Django 5.1.2 o superior.
+-   Paquetes de sistema requeridos (Ubuntu):
+    ```bash
+    sudo apt update
+    sudo apt install build-essential libpq-dev python3-dev
+    ```
 
-### Prerequisites
+### Configuración Local
 
--   Python 3.10 or higher
--   Django 5.1.2 or higher
--   Required system packages (Ubuntu):
+1.  **Clona el Repositorio**
+    ```bash
+    git clone https://github.com/sandovaldavid/project-02-auctions.git
+    cd auction-site
+    ```
 
-```bash
-sudo apt update
-sudo apt install build-essential libpq-dev python3-dev
-```
+2.  **Instala las Dependencias**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # En Windows: venv\Scripts\activate
+    pip install -r requirements.txt
+    ```
 
-### Local Setup
+3.  **Aplica las Migraciones de la Base de Datos**
+    ```bash
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
 
-1. **Clone the Repository**
+4.  **Crea un Superusuario**
+    ```bash
+    python manage.py createsuperuser
+    ```
 
-```bash
-git clone https://github.com/sandovaldavid/project-02-auctions.git
-cd auction-site
-```
+5.  **Ejecuta el Servidor de Desarrollo**
+    ```bash
+    python manage.py runserver
+    ```
 
-2. **Install Dependencies**
+6.  **Accede a la Aplicación**
+    Abre [http://localhost:8000](http://localhost:8000) en tu navegador.
 
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
+### Configuración con Docker
 
-3. **Apply Database Migrations**
+1.  **Construye y Ejecuta con Docker Compose**
+    ```bash
+    docker compose up --build
+    ```
 
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
+2.  **Accede a la Aplicación**
+    Abre [http://localhost:8000](http://localhost:8000) en tu navegador.
 
-4. **Create Admin User**
+---
 
-```bash
-python manage.py createsuperuser
-```
-
-5. **Run Development Server**
-
-```bash
-python manage.py runserver
-```
-
-6. **Access the Application**  
-   Open [http://localhost:8000](http://localhost:8000) in your browser
-
-### Docker Setup
-
-1. **Build and Run with Docker Compose**
-
-```bash
-docker compose up --build
-```
-
-2. **Access the Application**  
-   Open [http://localhost:8000](http://localhost:8000) in your browser
-
-## 📂 Project Structure
+## 📂 Estructura del Proyecto
 
 ```plaintext
 auctions/
-├── migrations/         # Database migration files
-├── templates/          # HTML templates for the app
+├── migrations/         # Archivos de migración de la base de datos
+├── templates/          # Plantillas HTML para la aplicación
 │   ├── auctions/
-│   │   ├── layout.html         # Base layout
-│   │   ├── index.html          # Active listings page
-│   │   ├── create.html         # Create listing page
-│   │   ├── listing.html        # Listing details page
-│   │   ├── categories.html     # Categories page
-│   │   └── watchlist.html      # Watchlist page
-│   └── auctions/components/    # Reusable UI components
-│       ├── footer.html         # Site footer
-│       └── ...                 # Other components
-├── static/             # CSS and JavaScript files
+│   │   ├── layout.html         # Diseño base
+│   │   ├── index.html          # Página de anuncios activos
+│   │   ├── create.html         # Página para crear anuncios
+│   │   ├── listing.html        # Página de detalles del anuncio
+│   │   ├── categories.html     # Página de categorías
+│   │   └── watchlist.html      # Página de la lista de seguimiento
+│   └── auctions/components/    # Componentes de UI reutilizables
+│       ├── footer.html         # Pie de página del sitio
+│       └── ...                 # Otros componentes
+├── static/             # Archivos CSS y JavaScript
 │   ├── css/
-│   │   ├── auctions/           # Page-specific styles
-│   │   ├── components/         # Component styles
-│   │   └── styles.css          # Base styles
-│   └── js/                     # JavaScript files
-├── models.py           # Data models for the app
-├── views.py            # Application logic and views
-├── urls.py             # URL configuration
-├── forms.py            # Django forms
-├── context_processors.py # Custom context processors
-└── admin.py            # Admin interface configuration
+│   │   ├── auctions/           # Estilos específicos de la página
+│   │   ├── components/         # Estilos de los componentes
+│   │   └── styles.css          # Estilos base
+│   └── js/                     # Archivos JavaScript
+├── models.py           # Modelos de datos para la aplicación
+├── views.py            # Lógica de la aplicación y vistas
+├── urls.py             # Configuración de URLs
+├── forms.py            # Formularios de Django
+├── context_processors.py # Procesadores de contexto personalizados
+└── admin.py            # Configuración de la interfaz de administración
 ```
 
-## 📱 Usage Guide
+---
 
-1. **Register and Sign In**
+## 📱 Guía de Uso
 
-    - Create a new account or log in to access full functionality
-    - Navigate through the responsive interface
+1.  **Regístrate e Inicia Sesión**
+    -   Crea una nueva cuenta o inicia sesión para acceder a toda la funcionalidad.
+    -   Navega a través de la interfaz responsiva.
 
-2. **Browse Listings**
+2.  **Explora los Anuncios**
+    -   Explora la página de inicio para ver todas las subastas activas.
+    -   Usa los filtros de categoría para encontrar artículos específicos.
 
-    - Explore the homepage for all active auctions
-    - Use category filters to find specific items
+3.  **Crea tu Propio Anuncio**
+    -   Haz clic en "Crear Anuncio" en el menú de navegación.
+    -   Completa el formulario con los detalles de tu artículo.
+    -   Publica tu subasta.
 
-3. **Create Your Own Listing**
+4.  **Realiza una Oferta**
+    -   Realiza ofertas en los anuncios activos.
+    -   Monitorea tus ofertas activas.
+    -   Recibe notificaciones si ganas una subasta.
 
-    - Click "Create Listing" in the navigation menu
-    - Fill out the form with your item's details
-    - Publish your auction
+5.  **Gestiona tu Lista de Seguimiento**
+    -   Añade artículos interesantes a tu lista de seguimiento.
+    -   Elimina artículos según sea necesario.
+    -   Accede rápidamente a tus artículos seguidos.
 
-4. **Bidding**
+6.  **Interactúa con la Comunidad**
+    -   Deja comentarios en los anuncios.
+    -   Interactúa con vendedores y otros postores.
 
-    - Place bids on active listings
-    - Monitor your active bids
-    - Receive notifications if you win an auction
+---
 
-5. **Manage Watchlist**
+## 🎨 Características de UI/UX
 
-    - Add interesting items to your watchlist
-    - Remove items as needed
-    - Quick access to your watched items
+-   **Diseño Responsivo**: Optimizado para todos los tamaños de pantalla, desde móviles hasta ordenadores de escritorio.
+-   **Modo Oscuro/Claro**: Soporte para las preferencias de tema del sistema.
+-   **Accesibilidad**: Estados de foco y HTML semántico.
+-   **Interfaz Moderna**: Diseño limpio con espaciado y tipografía consistentes.
+-   **Navegación Intuitiva**: Rutas de usuario claras a través de la aplicación.
+-   **Microinteracciones**: Retroalimentación visual para las acciones del usuario.
 
-6. **Interact with Community**
-    - Leave comments on listings
-    - Engage with sellers and other bidders
+---
 
-## 🎨 UI/UX Features
+## 🔄 Endpoints de API
 
--   **Responsive Design**: Optimized for all screen sizes from mobile to desktop
--   **Dark/Light Mode**: Support for system theme preferences
--   **Accessibility**: Focus states and semantic HTML
--   **Modern Interface**: Clean design with consistent spacing and typography
--   **Intuitive Navigation**: Clear user paths through the application
--   **Microinteractions**: Visual feedback for user actions
+Actualmente, la aplicación no expone APIs públicas, pero utiliza el enrutamiento de URLs de Django para toda la funcionalidad.
 
-## 🔄 API Endpoints
+---
 
-The application doesn't currently expose public APIs but uses Django's URL routing for all functionality.
+## 🔒 Características de Seguridad
 
-## 🔒 Security Features
+-   Protección CSRF para todos los formularios.
+-   Hashing de contraseñas y autenticación segura.
+-   Validación de formularios para prevenir entradas maliciosas.
+-   Configuración del middleware de seguridad de Django.
 
--   CSRF protection for all forms
--   Password hashing and secure authentication
--   Form validation to prevent malicious inputs
--   Django's security middleware configuration
+---
 
-## 🚧 Future Improvements
+## 🚧 Mejoras Futuras
 
--   Real-time updates using WebSockets for live bidding experiences
--   Advanced listing filtering options (price range, date listed)
--   Email notification system for bid updates and auction closures
--   Enhanced mobile responsiveness and UI/UX improvements
--   Payment gateway integration for completed auctions
--   User ratings and reviews system
--   Enhanced search functionality with autocomplete
--   Social media sharing integration
+-   [ ] **Actualizaciones en tiempo real** con WebSockets para experiencias de puja en vivo.
+-   [ ] Opciones avanzadas de **filtrado de anuncios** (rango de precios, fecha de publicación).
+-   [ ] Sistema de **notificaciones por correo electrónico** para actualizaciones de ofertas y cierres de subastas.
+-   [ ] Mejoras en la **responsividad móvil y UI/UX**.
+-   [ ] Integración de **pasarelas de pago** para subastas finalizadas.
+-   [ ] Sistema de **calificaciones y reseñas** de usuarios.
+-   [ ] Funcionalidad de **búsqueda mejorada** con autocompletado.
+-   [ ] Integración para **compartir en redes sociales**.
 
-## 🤝 Contributing
+---
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## 🤝 Contribuciones
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+¡Las contribuciones son bienvenidas! No dudes en enviar un Pull Request.
 
-## 🧪 Testing
+1.  **Haz un Fork** del repositorio.
+2.  Crea tu rama de características (`git checkout -b feature/amazing-feature`).
+3.  **Haz Commit** de tus cambios (`git commit -m 'Añade una característica increíble'`).
+4.  **Haz Push** a la rama (`git push origin feature/amazing-feature`).
+5.  Abre un **Pull Request**.
 
-Run the test suite to ensure everything is working correctly:
+---
+
+## 🧪 Pruebas
+
+Ejecuta la suite de pruebas para asegurarte de que todo funciona correctamente:
 
 ```bash
 python manage.py test
 ```
 
-## 📄 License
+---
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 📄 Licencia
 
-## 📞 Contact
+Este proyecto está bajo la Licencia MIT - consulta el archivo [LICENSE](LICENSE) para más detalles.
+
+---
+
+## 📞 Contacto
 
 David Sandoval - [@sandovaldavid](https://github.com/sandovaldavid)
 
-Project Link: [https://github.com/sandovaldavid/project-02-auctions.git](https://github.com/sandovaldavid/project-02-auctions.git)
+Enlace del Proyecto: [https://github.com/sandovaldavid/project-02-auctions.git](https://github.com/sandovaldavid/project-02-auctions.git)
