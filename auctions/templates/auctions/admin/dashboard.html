@@ -1,0 +1,349 @@
+{% extends "auctions/admin/base.html" %}
+{% load static %}
+
+{% block admin_content %}
+<!-- Métricas principales -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="metric-card">
+            <div class="d-flex align-items-center">
+                <div class="metric-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-gavel"></i>
+                </div>
+                <div class="ms-3">
+                    <div class="metric-value">{{ dashboard_data.metrics.total_listings }}</div>
+                    <div class="metric-label">Total Subastas</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="metric-card">
+            <div class="d-flex align-items-center">
+                <div class="metric-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <div class="ms-3">
+                    <div class="metric-value">{{ dashboard_data.metrics.active_listings }}</div>
+                    <div class="metric-label">Subastas Activas</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="metric-card">
+            <div class="d-flex align-items-center">
+                <div class="metric-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="ms-3">
+                    <div class="metric-value">{{ dashboard_data.metrics.total_users }}</div>
+                    <div class="metric-label">Usuarios</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="metric-card">
+            <div class="d-flex align-items-center">
+                <div class="metric-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="ms-3">
+                    <div class="metric-value">${{ dashboard_data.metrics.total_auction_value|floatformat:0 }}</div>
+                    <div class="metric-label">Valor Total</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Métricas adicionales -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="metric-card">
+            <div class="d-flex align-items-center">
+                <div class="metric-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <i class="fas fa-hand-holding-usd"></i>
+                </div>
+                <div class="ms-3">
+                    <div class="metric-value">{{ dashboard_data.metrics.total_bids }}</div>
+                    <div class="metric-label">Total Pujas</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="metric-card">
+            <div class="d-flex align-items-center">
+                <div class="metric-icon" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="ms-3">
+                    <div class="metric-value">{{ dashboard_data.metrics.total_comments }}</div>
+                    <div class="metric-label">Comentarios</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="d-flex align-items-center">
+            <div class="metric-icon" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                <i class="fas fa-heart"></i>
+            </div>
+            <div class="ms-3">
+                <div class="metric-value">{{ dashboard_data.metrics.total_watchlist_items }}</div>
+                <div class="metric-label">En Watchlist</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="metric-card">
+            <div class="d-flex align-items-center">
+                <div class="metric-icon" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+                    <i class="fas fa-percentage"></i>
+                </div>
+                <div class="ms-3">
+                    <div class="metric-value">{{ dashboard_data.metrics.conversion_rate|floatformat:1 }}%</div>
+                    <div class="metric-label">Tasa Conversión</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gráficos principales -->
+<div class="row mb-4">
+    <div class="col-lg-8 mb-4">
+        <div class="chart-container">
+            <h5 class="mb-3">
+                <i class="fas fa-chart-line text-primary"></i>
+                Tendencias de Actividad
+            </h5>
+            <div id="trendsChart">
+                {{ dashboard_data.charts.trends|safe }}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4 mb-4">
+        <div class="chart-container">
+            <h5 class="mb-3">
+                <i class="fas fa-chart-pie text-success"></i>
+                Subastas por Categoría
+            </h5>
+            <div id="categoriesChart">
+                {{ dashboard_data.charts.categories|safe }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Análisis de precios -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="chart-container">
+            <h5 class="mb-3">
+                <i class="fas fa-chart-scatter text-warning"></i>
+                Análisis de Precios: Inicial vs Actual
+            </h5>
+            <div id="priceAnalysisChart">
+                {{ dashboard_data.charts.price_analysis|safe }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tablas de actividad reciente -->
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <div class="table-container">
+            <h5 class="mb-3">
+                <i class="fas fa-clock text-info"></i>
+                Subastas Recientes
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Usuario</th>
+                            <th>Precio</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for listing in recent_listings %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'admin_listing_detail' listing.id %}" class="text-decoration-none">
+                                    {{ listing.title|truncatechars:30 }}
+                                </a>
+                            </td>
+                            <td>{{ listing.user.username }}</td>
+                            <td>
+                                <span class="fw-bold">${{ listing.current_bid|default:listing.starting_bid }}</span>
+                            </td>
+                            <td>
+                                {% if listing.active %}
+                                    <span class="badge bg-success badge-custom">Activa</span>
+                                {% else %}
+                                    <span class="badge bg-secondary badge-custom">Inactiva</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">No hay subastas recientes</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6 mb-4">
+        <div class="table-container">
+            <h5 class="mb-3">
+                <i class="fas fa-hand-holding-usd text-success"></i>
+                Pujas Recientes
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Subasta</th>
+                            <th>Monto</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bid in recent_bids %}
+                        <tr>
+                            <td>{{ bid.user.username }}</td>
+                            <td>
+                                <a href="{% url 'admin_listing_detail' bid.listing.id %}" class="text-decoration-none">
+                                    {{ bid.listing.title|truncatechars:25 }}
+                                </a>
+                            </td>
+                            <td>
+                                <span class="fw-bold text-success">${{ bid.amount }}</span>
+                            </td>
+                            <td>
+                                <small class="text-muted">{{ bid.listing.created|date:"M d, H:i" }}</small>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">No hay pujas recientes</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Usuarios más activos -->
+<div class="row">
+    <div class="col-12">
+        <div class="table-container">
+            <h5 class="mb-3">
+                <i class="fas fa-trophy text-warning"></i>
+                Usuarios Más Activos
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Subastas Creadas</th>
+                            <th>Pujas Realizadas</th>
+                            <th>Comentarios</th>
+                            <th>Actividad Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in top_users %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                         style="width: 35px; height: 35px;">
+                                        <span class="text-white fw-bold">{{ user.username|first|upper }}</span>
+                                    </div>
+                                    {{ user.username }}
+                                </div>
+                            </td>
+                            <td>{{ user.listings_count }}</td>
+                            <td>{{ user.bids_count }}</td>
+                            <td>{{ user.comments_count }}</td>
+                            <td>
+                                <span class="badge bg-primary badge-custom">{{ user.total_activity }}</span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No hay datos de usuarios</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Indicador de carga para actualizaciones automáticas -->
+<div class="loading" id="loadingIndicator">
+    <div class="spinner-border spinner-border-custom" role="status">
+        <span class="visually-hidden">Actualizando...</span>
+    </div>
+    <p class="mt-2 text-muted">Actualizando métricas...</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+    // Función para actualizar métricas en tiempo real
+    function updateMetrics(data) {
+        // Actualizar valores de las métricas
+        document.querySelector('.metric-value').textContent = data.total_listings;
+        // Agregar más actualizaciones según sea necesario
+    }
+
+    // Mostrar indicador de carga durante actualizaciones
+    function showLoading() {
+        document.getElementById('loadingIndicator').style.display = 'block';
+    }
+
+    function hideLoading() {
+        document.getElementById('loadingIndicator').style.display = 'none';
+    }
+
+    // Configurar actualizaciones automáticas
+    setInterval(function() {
+        showLoading();
+        fetch('{% url "admin_api_metrics" %}')
+            .then(response => response.json())
+            .then(data => {
+                updateMetrics(data);
+                hideLoading();
+            })
+            .catch(error => {
+                console.log('Error actualizando métricas:', error);
+                hideLoading();
+            });
+    }, 30000);
+</script>
+{% endblock %}
