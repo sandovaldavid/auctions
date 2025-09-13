@@ -1,5 +1,12 @@
 {% extends "auctions/layout.html" %}
+{% load static %}
+
 {% block title %}{{ listing.title }}{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/pages/auction.css' %}" rel="stylesheet" />
+{% endblock %}
+
 {% block body %}
 {% include 'auctions/components/alert.html' %}
 
