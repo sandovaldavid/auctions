@@ -151,10 +151,6 @@
 
 /* Mobile Styles (<768px) */
 @media (max-width: 767.98px) {
-	.container {
-		padding: 1rem;
-	}
-
 	.col-md-6 {
 		width: 100%;
 		padding: 0 0.5rem;
@@ -197,10 +193,6 @@
 
 /* Small Mobile Styles (<576px) */
 @media (max-width: 575.98px) {
-	.container {
-		padding: 0.5rem;
-	}
-
 	.card-body {
 		padding: 1rem !important;
 	}
@@ -230,10 +222,6 @@
 
 /* Landscape Mode Adjustments */
 @media (max-height: 500px) and (orientation: landscape) {
-	.container {
-		padding: 0.5rem;
-	}
-
 	.card-body {
 		padding: 1rem !important;
 	}
