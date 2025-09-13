@@ -75,3 +75,7 @@ class Watchlist(models.Model):
 
     def __str__(self):
         return f"{self.user} added {self.listing.title} to watchlist"
+
+    def toggle(self):
+        self.active = not self.active
+        self.save()
