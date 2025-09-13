@@ -1,5 +1,14 @@
-{% extends "auctions/layout.html" %} {% block title %}Watch List{% endblock %}
-{% block body %} {% include "auctions/components/alert.html" %}
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block title %}Watch List{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/pages/watchlist.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+{% include "auctions/components/alert.html" %}
 
 <div class="container py-5">
     <div class="row mb-4">
