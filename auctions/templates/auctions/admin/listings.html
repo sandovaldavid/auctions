@@ -1,0 +1,252 @@
+{% extends "auctions/admin/base.html" %}
+{% load static %}
+
+{% block admin_content %}
+<!-- Filtros y búsqueda -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="search" class="form-label">Buscar</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               value="{{ search_query }}" placeholder="Título, descripción o usuario...">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="category" class="form-label">Categoría</label>
+                        <select class="form-select" id="category" name="category">
+                            <option value="">Todas las categorías</option>
+                            {% for category in categories %}
+                                <option value="{{ category }}" {% if category_filter == category %}selected{% endif %}>
+                                    {{ category|default:"Sin categoría" }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="status" class="form-label">Estado</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="">Todos los estados</option>
+                            <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Activas</option>
+                            <option value="inactive" {% if status_filter == 'inactive' %}selected{% endif %}>Inactivas</option>
+                            <option value="with_bids" {% if status_filter == 'with_bids' %}selected{% endif %}>Con pujas</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="sort" class="form-label">Ordenar por</label>
+                        <select class="form-select" id="sort" name="sort">
+                            <option value="-created" {% if sort_by == '-created' %}selected{% endif %}>Más recientes</option>
+                            <option value="created" {% if sort_by == 'created' %}selected{% endif %}>Más antiguas</option>
+                            <option value="-current_bid" {% if sort_by == '-current_bid' %}selected{% endif %}>Mayor precio</option>
+                            <option value="current_bid" {% if sort_by == 'current_bid' %}selected{% endif %}>Menor precio</option>
+                            <option value="-title" {% if sort_by == '-title' %}selected{% endif %}>Título Z-A</option>
+                            <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Título A-Z</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary btn-custom">
+                            <i class="fas fa-search"></i> Filtrar
+                        </button>
+                        <a href="{% url 'admin_listings' %}" class="btn btn-outline-secondary btn-custom">
+                            <i class="fas fa-times"></i> Limpiar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabla de subastas -->
+<div class="row">
+    <div class="col-12">
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">
+                    <i class="fas fa-gavel text-primary"></i>
+                    Gestión de Subastas
+                </h5>
+                <span class="text-muted">{{ page_obj.paginator.count }} subastas encontradas</span>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Usuario</th>
+                            <th>Precio Inicial</th>
+                            <th>Precio Actual</th>
+                            <th>Categoría</th>
+                            <th>Pujas</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for listing in page_obj %}
+                        <tr>
+                            <td>
+                                <span class="badge bg-light text-dark">#{{ listing.id }}</span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    {% if listing.image %}
+                                        <img src="{{ listing.image }}" alt="{{ listing.title }}" 
+                                             class="rounded me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="bg-secondary rounded d-flex align-items-center justify-content-center me-2" 
+                                             style="width: 40px; height: 40px;">
+                                            <i class="fas fa-image text-white"></i>
+                                        </div>
+                                    {% endif %}
+                                    <div>
+                                        <a href="{% url 'admin_listing_detail' listing.id %}" class="text-decoration-none fw-bold">
+                                            {{ listing.title|truncatechars:30 }}
+                                        </a>
+                                        <br>
+                                        <small class="text-muted">{{ listing.description|truncatechars:50 }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                         style="width: 30px; height: 30px;">
+                                        <span class="text-white fw-bold small">{{ listing.user.username|first|upper }}</span>
+                                    </div>
+                                    {{ listing.user.username }}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="fw-bold">${{ listing.starting_bid }}</span>
+                            </td>
+                            <td>
+                                {% if listing.current_bid %}
+                                    <span class="fw-bold text-success">${{ listing.current_bid }}</span>
+                                    {% if listing.current_bid > listing.starting_bid %}
+                                        <br><small class="text-success">
+                                            +{{ listing.current_bid|sub:listing.starting_bid|floatformat:2 }}
+                                        </small>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">Sin pujas</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if listing.category %}
+                                    <span class="badge bg-info badge-custom">{{ listing.category }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary badge-custom">Sin categoría</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-warning badge-custom">{{ listing.bids.count }}</span>
+                            </td>
+                            <td>
+                                {% if listing.active %}
+                                    <span class="badge bg-success badge-custom">Activa</span>
+                                {% else %}
+                                    <span class="badge bg-secondary badge-custom">Inactiva</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <small class="text-muted">{{ listing.created|date:"M d, Y" }}</small>
+                                <br>
+                                <small class="text-muted">{{ listing.created|time:"H:i" }}</small>
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{% url 'admin_listing_detail' listing.id %}" 
+                                       class="btn btn-sm btn-outline-primary" 
+                                       data-bs-toggle="tooltip" title="Ver detalles">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'admin_toggle_listing_status' listing.id %}" 
+                                       class="btn btn-sm btn-outline-{% if listing.active %}warning{% else %}success{% endif %}" 
+                                       data-bs-toggle="tooltip" 
+                                       title="{% if listing.active %}Desactivar{% else %}Activar{% endif %}">
+                                        <i class="fas fa-{% if listing.active %}pause{% else %}play{% endif %}"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="10" class="text-center text-muted py-4">
+                                <i class="fas fa-search fa-2x mb-2"></i>
+                                <br>No se encontraron subastas con los filtros aplicados
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Paginación -->
+            {% if page_obj.has_other_pages %}
+            <nav aria-label="Paginación de subastas" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+                                <i class="fas fa-angle-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+                                <i class="fas fa-angle-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+                                <i class="fas fa-angle-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+    // Confirmar cambio de estado de subasta
+    document.querySelectorAll('a[href*="toggle_listing_status"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const action = this.querySelector('i').classList.contains('fa-pause') ? 'desactivar' : 'activar';
+            if (confirm(`¿Estás seguro de que quieres ${action} esta subasta?`)) {
+                window.location.href = this.href;
+            }
+        });
+    });
+</script>
+{% endblock %}
