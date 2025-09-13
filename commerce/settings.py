@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_extensions",
+    "import_export",
 ]
 
 MIDDLEWARE = [
@@ -52,6 +54,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "auctions.middleware.Custom404Middleware",  # Nuestro middleware personalizado
 ]
 
 ROOT_URLCONF = "commerce.urls"
@@ -72,6 +75,13 @@ TEMPLATES = [
         },
     },
 ]
+
+# Configuración para templates de error personalizados
+TEMPLATE_DEBUG = DEBUG
+
+# Deshabilitar la página de debug por defecto de Django para usar nuestros handlers personalizados
+# Esto permite que nuestros handlers personalizados funcionen incluso en modo DEBUG
+USE_CUSTOM_ERROR_HANDLERS = True
 
 WSGI_APPLICATION = "commerce.wsgi.application"
 
@@ -135,11 +145,19 @@ STATIC_URL = "/static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "/login"  # Cambia la ruta según tu configuración
 
-# Extra places for collectstatic to find static files.
+# Configuración de archivos estáticos
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "auctions/static"),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 django_heroku.settings(locals())
+
+# Configuración de archivos estáticos
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+# Configuración específica para desarrollo (después de django_heroku)
+if DEBUG:
+    # Asegurar que STATICFILES_DIRS esté configurado correctamente
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "auctions/static"),
+    ]
