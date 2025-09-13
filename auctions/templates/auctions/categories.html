@@ -1,7 +1,13 @@
 {% extends "auctions/layout.html" %}
 {% load auctions_filters %}
+{% load static %}
 
 {% block title %}Categories - Browse by Interest{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/pages/categories.css' %}" rel="stylesheet" />
+{% endblock %}
+
 {% block body %}
 <div class="categories-container py-4 py-md-5">
     <div class="container">
