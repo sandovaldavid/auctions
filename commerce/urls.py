@@ -16,5 +16,29 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from django.conf import settings
+from django.conf.urls.static import static
+from auctions.error_views import (
+    custom_404_view,
+    custom_500_view,
+    custom_403_view,
+    custom_400_view,
+)
 
-urlpatterns = [path("admin/", admin.site.urls), path("", include("auctions.urls"))]
+urlpatterns = [
+    path("", include("auctions.urls")),
+    path("admin", admin.site.urls),
+]
+
+# Servir archivos estáticos en desarrollo
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0]
+    )
+
+# Configurar manejadores de errores personalizados
+# Estos deben estar definidos a nivel de módulo para que Django los reconozca
+handler404 = custom_404_view
+handler500 = custom_500_view
+handler403 = custom_403_view
+handler400 = custom_400_view
