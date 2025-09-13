@@ -2,7 +2,13 @@ from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from auctions.models import Listing, Bid, Comment, Watchlist
-from .factories import UserFactory, ListingFactory, BidFactory, CommentFactory, WatchlistFactory
+from .factories import (
+    UserFactory,
+    ListingFactory,
+    BidFactory,
+    CommentFactory,
+    WatchlistFactory,
+)
 
 
 class ListingModelTest(TestCase):
@@ -11,7 +17,9 @@ class ListingModelTest(TestCase):
         self.assertEqual(str(listing), "My Test Listing - 10.00")
 
     def test_place_bid_successfully(self):
-        listing = ListingFactory(starting_bid=Decimal("10.00"), current_bid=Decimal("10.00"))
+        listing = ListingFactory(
+            starting_bid=Decimal("10.00"), current_bid=Decimal("10.00")
+        )
         user = UserFactory()
         listing.place_bid(user, Decimal("12.00"))
         self.assertEqual(listing.current_bid, Decimal("12.00"))
@@ -20,13 +28,17 @@ class ListingModelTest(TestCase):
         self.assertEqual(listing.bids.first().amount, Decimal("12.00"))
 
     def test_place_bid_with_lower_amount(self):
-        listing = ListingFactory(starting_bid=Decimal("10.00"), current_bid=Decimal("12.00"))
+        listing = ListingFactory(
+            starting_bid=Decimal("10.00"), current_bid=Decimal("12.00")
+        )
         user = UserFactory()
         with self.assertRaises(ValidationError):
             listing.place_bid(user, Decimal("11.00"))
 
     def test_place_bid_with_equal_amount(self):
-        listing = ListingFactory(starting_bid=Decimal("10.00"), current_bid=Decimal("12.00"))
+        listing = ListingFactory(
+            starting_bid=Decimal("10.00"), current_bid=Decimal("12.00")
+        )
         user = UserFactory()
         with self.assertRaises(ValidationError):
             listing.place_bid(user, Decimal("12.00"))
@@ -53,7 +65,9 @@ class WatchlistModelTest(TestCase):
         user = UserFactory(username="watcher")
         listing = ListingFactory(title="Watchlist Item")
         watchlist_item = WatchlistFactory(user=user, listing=listing)
-        self.assertEqual(str(watchlist_item), "watcher added Watchlist Item to watchlist")
+        self.assertEqual(
+            str(watchlist_item), "watcher added Watchlist Item to watchlist"
+        )
 
     def test_toggle_watchlist(self):
         watchlist_item = WatchlistFactory(active=True)
