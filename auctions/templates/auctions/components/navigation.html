@@ -1,0 +1,111 @@
+{% load static %}
+
+<!-- Navigation Component -->
+<nav
+	class="navbar navbar-expand-lg sticky-top flex-nowrap"
+	aria-label="Main navigation">
+	<!-- Theme Toggle -->
+	<button
+		type="button"
+		class="theme-toggle"
+		onclick="typeof toggleTheme === 'function' ? toggleTheme() : console.error('toggleTheme function not found')"
+		aria-label="Toggle dark/light mode">
+		<i class="fas fa-sun" id="themeIcon" aria-hidden="true"></i>
+	</button>
+
+	<div class="container">
+		<!-- Brand -->
+		<a
+			href="{% url 'index' %}"
+			class="brand-title"
+			aria-label="Auctions home page">
+			<i class="fas fa-gavel me-2" aria-hidden="true"></i>Auctions
+		</a>
+
+		<!-- Mobile Menu Toggle -->
+		<button
+			class="navbar-toggler"
+			type="button"
+			data-bs-toggle="collapse"
+			data-bs-target="#navbarNav"
+			aria-controls="navbarNav"
+			aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<!-- Navigation Links -->
+		<div
+			class="collapse navbar-collapse justify-content-between"
+			id="navbarNav">
+			<ul class="navbar-nav ms-auto">
+				<li class="nav-item">
+					<a
+						class="nav-link px-2 {% if request.resolver_match.url_name == 'index' %}active text-light{% endif %}"
+						href="{% url 'index' %}">
+						<i class="fas fa-list-ul me-1" aria-hidden="true"></i>
+						<span>Active Listings</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a
+						class="nav-link px-2 {% if request.resolver_match.url_name == 'categories' %}active text-light{% endif %}"
+						href="{% url 'categories' %}">
+						<i class="fas fa-tags me-1" aria-hidden="true"></i>
+						<span>Categories</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a
+						class="nav-link px-2 {% if request.resolver_match.url_name == 'new_auction' %}active text-light{% endif %}"
+						href="{% url 'new_auction' %}">
+						<i class="fas fa-plus-circle me-1" aria-hidden="true"></i>
+						<span>Add Auction</span>
+					</a>
+				</li>
+				{% if user.is_authenticated %}
+				<li class="nav-item">
+					<a
+						class="nav-link px-2 {% if request.resolver_match.url_name == 'watchlist' %}active text-light{% endif %}"
+						href="{% url 'watchlist' user.id %}">
+						<i class="fas fa-heart me-1" aria-hidden="true"></i>
+						<span>Watchlist</span>
+						{% if watchlist_count > 0 %}
+						<span class="badge bg-danger">{{ watchlist_count }}</span>
+						{% endif %}
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link px-2" href="{% url 'logout' %}">
+						<i class="fas fa-sign-out-alt me-1" aria-hidden="true"></i>
+						<span>Logout</span>
+					</a>
+				</li>
+				{% else %}
+				<li class="nav-item">
+					<a
+						class="nav-link px-2 {% if request.resolver_match.url_name == 'login' %}active text-light{% endif %}"
+						href="{% url 'login' %}">
+						<i class="fas fa-sign-in-alt me-1" aria-hidden="true"></i>
+						<span>Login</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a
+						class="nav-link px-2 {% if request.resolver_match.url_name == 'register' %}active text-light{% endif %}"
+						href="{% url 'register' %}">
+						<i class="fas fa-user-plus me-1" aria-hidden="true"></i>
+						<span>Register</span>
+					</a>
+				</li>
+				{% endif %}
+			</ul>
+			{% if user.is_authenticated %}
+			<div class="user-info">
+				<i class="fas fa-user me-1" aria-hidden="true"></i>
+				<strong>{{ user.username }}</strong>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</nav>
