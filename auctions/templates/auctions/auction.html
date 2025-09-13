@@ -75,11 +75,11 @@
                                     <form action="{% url 'watchlist' listing.id %}" method="post" class="d-inline">
                                         {% csrf_token %}
                                         <button type="submit" 
-                                                class="btn btn-outline-heart {% if listing in user.watchlist.all %}active{% endif %}"
-                                                title="{% if listing in user.watchlist.all %}Remove from Watchlist{% else %}Add to Watchlist{% endif %}">
+                                                class="btn btn-outline-heart {% if listing in user.watchlist.filter.active %}active{% endif %}"
+                                                title="{% if listing in user.watchlist.filter.active %}Remove from Watchlist{% else %}Add to Watchlist{% endif %}">
                                             <i class="fas fa-heart"></i>
                                             <span class="watchlist-text">
-                                                {% if listing in user.watchlist.all %}
+                                                {% if listing in user.watchlist.filter.active %}
                                                     In Watchlist
                                                 {% else %}
                                                     Add to Watchlist
