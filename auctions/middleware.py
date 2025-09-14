@@ -82,7 +82,6 @@ class Custom404Middleware:
             and hasattr(settings, "USE_CUSTOM_ERROR_HANDLERS")
             and settings.USE_CUSTOM_ERROR_HANDLERS
         ):
-
             # Usar nuestro handler personalizado
             from .error_views import custom_404_view
 

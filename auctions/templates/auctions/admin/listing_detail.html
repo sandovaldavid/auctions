@@ -11,7 +11,7 @@
                     <div class="col-md-4">
                         {% if listing.image %}
                             <img src="{{ listing.image }}" alt="{{ listing.title }}" 
-                                 class="img-fluid rounded" style="max-height: 300px; width: 100%; object-fit: cover;">
+                                 class="img-fluid rounded img-cover" style="max-height: 300px; width: 100%;">
                         {% else %}
                             <div class="bg-secondary rounded d-flex align-items-center justify-content-center" 
                                  style="height: 300px;">
@@ -35,8 +35,7 @@
                                         <td><strong>Usuario:</strong></td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" 
-                                                     style="width: 30px; height: 30px;">
+                                                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2 icon-sm">
                                                     <span class="text-white fw-bold small">{{ listing.user.username|first|upper }}</span>
                                                 </div>
                                                 {{ listing.user.username }}
@@ -219,8 +218,7 @@
                             <td>{{ forloop.counter }}</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-success rounded-circle d-flex align-items-center justify-content-center me-2" 
-                                         style="width: 30px; height: 30px;">
+                                    <div class="bg-success rounded-circle d-flex align-items-center justify-content-center me-2 icon-sm">
                                         <span class="text-white fw-bold small">{{ bid.user.username|first|upper }}</span>
                                     </div>
                                     {{ bid.user.username }}
@@ -285,8 +283,7 @@
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-info rounded-circle d-flex align-items-center justify-content-center me-2" 
-                                         style="width: 30px; height: 30px;">
+                                    <div class="bg-info rounded-circle d-flex align-items-center justify-content-center me-2 icon-sm">
                                         <span class="text-white fw-bold small">{{ comment.user.username|first|upper }}</span>
                                     </div>
                                     {{ comment.user.username }}
