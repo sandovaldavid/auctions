@@ -16,11 +16,10 @@
 	// DOM Elements
 	let themeToggle, themeIcon, backToTopButton, body;
 
-	// Initialize immediately for onclick handlers, then when DOM is loaded
-	initializeElements();
-	initializeTheme();
-
+	// Initialize when DOM is loaded
 	document.addEventListener('DOMContentLoaded', function () {
+		initializeElements();
+		initializeTheme();
 		initializeBackToTop();
 		initializeAccessibility();
 	});
@@ -41,11 +40,12 @@
 	function initializeTheme() {
 		if (!themeToggle || !themeIcon) return;
 
-		// Apply saved theme
+		// Apply saved theme or default to light
 		const savedTheme = localStorage.getItem(CONFIG.themeStorageKey);
 		if (savedTheme === 'dark') {
 			applyDarkTheme();
 		} else {
+			// Default to light theme if no preference is saved
 			applyLightTheme();
 		}
 
@@ -57,7 +57,8 @@
 	 * Toggle between light and dark theme
 	 */
 	function toggleTheme() {
-		if (body.getAttribute('data-theme') === 'dark') {
+		const currentTheme = body.getAttribute('data-theme');
+		if (currentTheme === 'dark') {
 			applyLightTheme();
 		} else {
 			applyDarkTheme();
@@ -68,11 +69,14 @@
 	 * Apply light theme
 	 */
 	function applyLightTheme() {
-		body.removeAttribute('data-theme');
+		body.setAttribute('data-theme', 'light');
 		if (themeIcon) {
 			themeIcon.classList.replace('fa-moon', 'fa-sun');
 		}
 		localStorage.setItem(CONFIG.themeStorageKey, 'light');
+		
+		// Debug log
+		console.log('Applied light theme');
 
 		// Dispatch custom event
 		document.dispatchEvent(
@@ -91,6 +95,9 @@
 			themeIcon.classList.replace('fa-sun', 'fa-moon');
 		}
 		localStorage.setItem(CONFIG.themeStorageKey, 'dark');
+		
+		// Debug log
+		console.log('Applied dark theme');
 
 		// Dispatch custom event
 		document.dispatchEvent(
