@@ -8,7 +8,8 @@
 /* ========================================
    LIGHT THEME VARIABLES
    ======================================== */
-:root {
+:root,
+[data-theme="light"] {
     /* Primary Brand Colors */
     --primary-50: #eff6ff;
     --primary-100: #dbeafe;
@@ -233,7 +234,8 @@
 /* ========================================
    AUCTION-SPECIFIC COLORS
    ======================================== */
-:root {
+:root,
+[data-theme="light"] {
     /* Auction Status Colors */
     --status-active: var(--accent-green);
     --status-pending: var(--accent-gold);
