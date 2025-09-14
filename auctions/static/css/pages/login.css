@@ -1,237 +1,167 @@
-/* Login Page Styles */
+/* =================================
+   LOGIN PAGE STYLES
+   ================================= */
+
+/* Main card for the login form */
 .card {
-	background: var(--bg-main);
-	border-radius: 15px;
-	box-shadow: var(--shadow-lg);
-	transition: transform 0.3s ease;
-	width: 100%;
+    background: var(--bg-elevated);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.3s ease;
+    width: 100%;
+    border: none;
 }
 
 .card:hover {
-	transform: translateY(-5px);
+    transform: translateY(-5px);
 }
 
-/* Header Section */
+/* Header section */
 .card-title {
-	color: var(--text-primary);
-	font-weight: 600;
-	font-size: 2rem;
-	margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: var(--font-semibold);
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-2);
 }
 
-/* Icon Styles */
+/* User icon */
 .fa-user-circle {
-	color: #3498db;
-	transition: transform 0.3s ease;
+    color: var(--primary-500);
+    transition: transform 0.3s ease;
 }
 
 .card:hover .fa-user-circle {
-	transform: scale(1.1);
+    transform: scale(1.1);
 }
 
-/* Form Styles */
+/* Form styles */
 .form-label {
-	font-size: 0.95rem;
-	font-weight: 500;
-	color: var(--text-primary);
-	margin-bottom: 0.75rem;
-	display: flex;
-	align-items: center;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+    display: flex;
+    align-items: center;
 }
 
 .input-group {
-	transition: all 0.3s ease;
-	border-radius: 10px;
-	overflow: hidden;
-	background: var(--bg-main);
-	border: 1px solid var(--border-light);
+    transition: var(--transition-all);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
 }
 
 .input-group:focus-within {
-	box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+    box-shadow: 0 0 0 0.25rem rgba(from var(--primary-500) r g b / 0.25);
 }
 
 .input-group-text {
-	background: var(--bg-main);
-	border: 2px solid var(--border-light);
-	border-right: none;
-	color: var(--text-primary);
-	padding: 0.75rem 1rem;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-light);
+    border-right: none;
+    color: var(--text-primary);
+    padding: var(--space-3) var(--space-4);
 }
 
 .form-control {
-	border: 2px solid var(--border-light);
-	border-left: none;
-	padding: 1rem;
-	font-size: 1rem;
-	color: var(--text-primary);
-	background: var(--bg-secondary);
+    border: 2px solid var(--border-light);
+    border-left: none;
+    padding: var(--space-4);
+    font-size: var(--text-base);
+    color: var(--text-primary);
+    background: var(--bg-secondary);
 }
 
 .form-control:focus {
-	box-shadow: none;
-	border: none;
-	border-left: 1px solids rgba(52, 152, 219, 0.25);
+    box-shadow: none;
+    border: none;
+    border-left: 1px solid rgba(from var(--primary-500) r g b / 0.25);
 }
 
 .form-control::placeholder {
-	color: var(--text-secondary);
-	font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
 }
 
-/* Button Styles */
+/* Button styles */
 .btn-primary {
-	background: linear-gradient(45deg, #3498db, #2980b9);
-	border: none;
-	padding: 1rem 2rem;
-	font-weight: 500;
-	font-size: 1.1rem;
-	transition: all 0.3s ease;
-	border-radius: 10px;
+    background: var(--nav-gradient);
+    border: none;
+    padding: var(--space-4) var(--space-8);
+    font-weight: var(--font-medium);
+    font-size: 1.1rem;
+    transition: var(--transition-all);
+    border-radius: var(--radius-lg);
 }
 
 .btn-primary:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(from var(--primary-500) r g b / 0.3);
 }
 
 .btn-primary:active {
-	transform: translateY(0);
+    transform: translateY(0);
 }
 
-/* Alert Styling */
+/* Alert styling for errors */
 .alert {
-	border: none;
-	border-radius: 10px;
-	background-color: #f8d7da;
-	border-left: 4px solid #dc3545;
+    border: none;
+    border-radius: var(--radius-lg);
+    background-color: rgba(from var(--error) r g b / 0.1);
+    border-left: 4px solid var(--error);
 }
 
 .alert i {
-	color: #dc3545;
+    color: var(--error);
 }
 
 .text-center > p {
-	color: var(--text-primary);
+    color: var(--text-primary);
 }
 
-/* Register Link */
+/* Register link */
 .text-primary {
-	color: #3498db !important;
-	transition: color 0.3s ease;
+    color: var(--primary-500) !important;
+    transition: color 0.3s ease;
 }
 
 .text-primary:hover {
-	color: #2980b9 !important;
-	text-decoration: none;
+    color: var(--primary-600) !important;
+    text-decoration: none;
 }
 
-/* Tablet Styles (≥768px and <992px) */
-@media (min-width: 768px) and (max-width: 991.98px) {
-	.col-md-6 {
-		width: 70%;
-	}
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .card-body {
+        padding: var(--space-8) !important;
+    }
 
-	.card-body {
-		padding: 2rem !important;
-	}
-
-	.card-title {
-		font-size: 1.75rem;
-	}
-
-	.fa-user-circle {
-		font-size: 3.5em;
-	}
-
-	.form-control-lg {
-		font-size: 1rem;
-	}
+    .card-title {
+        font-size: var(--text-2xl);
+    }
 }
 
-/* Mobile Styles (<768px) */
 @media (max-width: 767.98px) {
-	.col-md-6 {
-		width: 100%;
-		padding: 0 0.5rem;
-	}
+    .card-body {
+        padding: var(--space-6) !important;
+    }
 
-	.card {
-		margin: 0.5rem;
-	}
-
-	.card-body {
-		padding: 1.5rem !important;
-	}
-
-	.card-title {
-		font-size: 1.5rem;
-	}
-
-	.fa-user-circle {
-		font-size: 3em;
-	}
-
-	.form-label {
-		font-size: 0.9rem;
-	}
-
-	.input-group {
-		margin-bottom: 1rem;
-	}
-
-	.form-control-lg {
-		font-size: 0.95rem;
-		padding: 0.75rem;
-	}
-
-	.btn-lg {
-		padding: 0.75rem 1rem;
-		font-size: 1rem;
-	}
+    .card-title {
+        font-size: var(--text-xl);
+    }
 }
 
-/* Small Mobile Styles (<576px) */
 @media (max-width: 575.98px) {
-	.card-body {
-		padding: 1rem !important;
-	}
+    .card-body {
+        padding: var(--space-4) !important;
+    }
 
-	.card-title {
-		font-size: 1.25rem;
-	}
+    .card-title {
+        font-size: var(--text-lg);
+    }
 
-	.text-muted {
-		font-size: 0.85rem;
-	}
-
-	.form-control-lg {
-		font-size: 0.9rem;
-		padding: 0.5rem;
-	}
-
-	.input-group-text {
-		padding: 0.5rem;
-	}
-
-	.btn-lg {
-		padding: 0.5rem;
-		font-size: 0.9rem;
-	}
-}
-
-/* Landscape Mode Adjustments */
-@media (max-height: 500px) and (orientation: landscape) {
-	.card-body {
-		padding: 1rem !important;
-	}
-
-	.fa-user-circle {
-		font-size: 2.5em;
-	}
-
-	.card-title {
-		font-size: 1.25rem;
-		margin-bottom: 0.25rem;
-	}
+    .text-muted {
+        font-size: var(--text-sm);
+    }
 }
