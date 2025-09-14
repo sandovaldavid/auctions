@@ -27,7 +27,7 @@ def custom_404_view(request, exception=None):
         debug_info = f"""
 Request Method: {request.method}
 Request URL: {request.build_absolute_uri()}
-Raised by: {getattr(exception, '__class__', 'Unknown')}
+Raised by: {getattr(exception, "__class__", "Unknown")}
 
 Using the URLconf defined in {settings.ROOT_URLCONF}, Django tried these URL patterns:
 
@@ -61,8 +61,8 @@ def custom_500_view(request):
             debug_info = f"""
 Request Method: {request.method}
 Request URL: {request.build_absolute_uri()}
-Exception Type: {exc_type.__name__ if exc_type else 'Unknown'}
-Exception Value: {str(exc_value) if exc_value else 'Unknown'}
+Exception Type: {exc_type.__name__ if exc_type else "Unknown"}
+Exception Value: {str(exc_value) if exc_value else "Unknown"}
 
 Traceback:
 {traceback.format_exc()}
@@ -88,7 +88,7 @@ def custom_403_view(request, exception=None):
         debug_info = f"""
 Request Method: {request.method}
 Request URL: {request.build_absolute_uri()}
-Exception: {getattr(exception, '__class__', 'Unknown')}
+Exception: {getattr(exception, "__class__", "Unknown")}
 
 You don't have permission to access this resource.
         """
@@ -111,7 +111,7 @@ def custom_400_view(request, exception=None):
         debug_info = f"""
 Request Method: {request.method}
 Request URL: {request.build_absolute_uri()}
-Exception: {getattr(exception, '__class__', 'Unknown')}
+Exception: {getattr(exception, "__class__", "Unknown")}
 
 Bad Request - The request could not be understood by the server.
         """
