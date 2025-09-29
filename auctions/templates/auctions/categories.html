@@ -76,7 +76,7 @@
                     <p>{{ selected_category|default:"No" }} items are currently available</p>
                     {% if user.is_authenticated %}
                     <div class="empty-actions">
-                        <a href="{% url 'addAuctions' %}" class="btn btn-primary btn-lg">
+                        <a href="{% url 'new_auction' %}" class="btn btn-primary btn-lg">
                             <i class="fas fa-plus-circle"></i>Create New Auction
                         </a>
                     </div>
