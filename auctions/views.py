@@ -5,11 +5,11 @@ from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from .forms import ListingForm, BidForm, CommentForm
-from .models import User, Listing, Watchlist
+from .forms import BidForm, CommentForm, ListingForm
+from .models import Listing, User, Watchlist
 
 
 def index(request):
@@ -79,9 +79,9 @@ def new_auctions(request):
         form = ListingForm(request.POST)
         if form.is_valid():
             # Set the logged-in user
-            listing = form.save(commit=False)  # Don't save yet
-            listing.user = request.user  # Set the user
-            listing.save()  # Now save the Listing}
+            new_listing = form.save(commit=False)  # Don't save yet
+            new_listing.user = request.user  # Set the user
+            new_listing.save()  # Now save the Listing
             messages.success(request, "Your listing has been created.")
             return redirect("index")
         messages.error(request, "There was an error with created your listing.")
@@ -112,7 +112,7 @@ def listing(request, listing_id):
 @login_required
 def bid(request, listing_id):
     auction = get_object_or_404(Listing, pk=listing_id)
-    comment_auction = auction.comments.all().count()
+    bid_count = auction.bids.count()
     if request.method == "POST":
         bid_form = BidForm(request.POST)
         if bid_form.is_valid():
@@ -122,7 +122,7 @@ def bid(request, listing_id):
                 messages.success(request, "Your bid has been placed successfully.")
                 messages.info(
                     request,
-                    f"({comment_auction}) bid(s) so far. Your bid is the current bid.",
+                    f"({bid_count + 1}) bid(s) so far. Your bid is the current bid.",
                 )
                 return redirect("listing", listing_id=listing_id)
             except ValidationError as e:
@@ -137,21 +137,23 @@ def bid(request, listing_id):
             "auctions/auction.html",
             {"listing": auction, "form": bid_form, "comments": auction.comments.all()},
         )
-    return None
+    return HttpResponseRedirect(reverse("listing", args=[listing_id]))
 
 
+@login_required
 def watchlist(request, listing_id):
     user = request.user
     if request.method == "POST":
-        listings_in_watchlist = Watchlist.objects.filter(
-            user=user, listing__id=listing_id
-        )
-        if listings_in_watchlist.exists():
-            listings_in_watchlist.update(active=True)
-            return HttpResponseRedirect(reverse("watchlist", args=[user.id]))
         current_listing = Listing.objects.get(pk=listing_id)
-        Watchlist.objects.create(user=user, listing=current_listing, active=True)
-        return HttpResponseRedirect(reverse("watchlist", args=[user.id]))
+        watchlist_item, created = Watchlist.objects.get_or_create(
+            user=user, listing=current_listing
+        )
+        if created:
+            watchlist_item.active = True
+        else:
+            watchlist_item.active = not watchlist_item.active
+        watchlist_item.save()
+        return HttpResponseRedirect(reverse("listing", args=[listing_id]))
     listings_in_watchlist = Listing.objects.filter(
         watchlist__user=user, watchlist__active=True
     ).order_by("-created")
@@ -161,6 +163,7 @@ def watchlist(request, listing_id):
     return render(request, "auctions/watchList.html", {"listings": page_listings})
 
 
+@login_required
 def watchlist_remove(request, listing_id):
     user = request.user
     current_listing = Listing.objects.get(pk=listing_id)
@@ -170,19 +173,20 @@ def watchlist_remove(request, listing_id):
     return HttpResponseRedirect(reverse("watchlist", args=[user.id]))
 
 
+@login_required
 def close_auction(request, listing_id):
-    listing = get_object_or_404(Listing, id=listing_id)
+    auction_listing = get_object_or_404(Listing, id=listing_id)
 
-    if request.user != listing.user:
+    if request.user != auction_listing.user:
         messages.error(request, "You are not authorized to close this auction.")
         return redirect("listing", listing_id=listing_id)
-    highest_bid = listing.bids.order_by("-amount").first()
+    highest_bid = auction_listing.bids.order_by("-amount").first()
     if highest_bid:
-        listing.winner = highest_bid.user
+        auction_listing.winner = highest_bid.user
     else:
         messages.warning(request, "No bids were placed on this listing.")
-    listing.active = False
-    listing.save()
+    auction_listing.active = False
+    auction_listing.save()
     messages.success(request, "The auction has been closed.")
     return redirect("listing", listing_id=listing_id)
 
@@ -203,7 +207,13 @@ def categories(request):
         "auctions/categories.html",
         {
             "listings": listings,
-            "category_choices": ListingForm.CATEGORY_CHOICES,
+            "category_choices": [
+                (cat, cat)
+                for cat in Listing.objects.filter(active=True)
+                .values_list("category", flat=True)
+                .distinct()
+                .order_by("category")
+            ],
             "selected_category": category,
         },
     )

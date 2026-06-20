@@ -1,0 +1,385 @@
+{% extends "auctions/admin/base.html" %}
+{% load static %}
+
+{% block admin_content %}
+<!-- Métricas generales -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-bar text-primary"></i>
+                    Métricas Generales del Sistema
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="metric-card text-center">
+                            <div class="metric-value text-primary">{{ basic_metrics.total_listings }}</div>
+                            <div class="metric-label">Total Subastas</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="metric-card text-center">
+                            <div class="metric-value text-success">{{ basic_metrics.active_listings }}</div>
+                            <div class="metric-label">Subastas Activas</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="metric-card text-center">
+                            <div class="metric-value text-info">{{ basic_metrics.total_users }}</div>
+                            <div class="metric-label">Usuarios</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="metric-card text-center">
+                            <div class="metric-value text-warning">{{ basic_metrics.total_bids }}</div>
+                            <div class="metric-label">Total Pujas</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Exportación de datos -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-download text-success"></i>
+                    Exportación de Datos
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">Descarga los datos del sistema en formato CSV para análisis externos.</p>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-primary">
+                            <div class="card-body text-center">
+                                <i class="fas fa-gavel fa-2x text-primary mb-3"></i>
+                                <h6>Subastas</h6>
+                                <p class="text-muted small">Exportar todas las subastas con sus detalles</p>
+                                <a href="{% url 'admin_export_data' %}?type=listings" class="btn btn-primary btn-custom">
+                                    <i class="fas fa-download"></i> Descargar CSV
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-success">
+                            <div class="card-body text-center">
+                                <i class="fas fa-hand-holding-usd fa-2x text-success mb-3"></i>
+                                <h6>Pujas</h6>
+                                <p class="text-muted small">Exportar historial completo de pujas</p>
+                                <a href="{% url 'admin_export_data' %}?type=bids" class="btn btn-success btn-custom">
+                                    <i class="fas fa-download"></i> Descargar CSV
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-info">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users fa-2x text-info mb-3"></i>
+                                <h6>Usuarios</h6>
+                                <p class="text-muted small">Exportar información de usuarios</p>
+                                <a href="{% url 'admin_export_data' %}?type=users" class="btn btn-info btn-custom">
+                                    <i class="fas fa-download"></i> Descargar CSV
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Análisis temporal -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="chart-container">
+            <h5 class="mb-3">
+                <i class="fas fa-chart-line text-primary"></i>
+                Análisis Temporal (Últimos 90 días)
+            </h5>
+            <canvas id="timeAnalysisChart" width="800" height="300"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Análisis de categorías -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="table-container">
+            <h5 class="mb-3">
+                <i class="fas fa-chart-pie text-success"></i>
+                Análisis por Categorías
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>Subastas</th>
+                            <th>Precio Promedio Inicial</th>
+                            <th>Precio Promedio Actual</th>
+                            <th>Total Pujas</th>
+                            <th>Pujas por Subasta</th>
+                            <th>Participación %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in category_analysis %}
+                        <tr>
+                            <td>
+                                <span class="badge bg-primary badge-custom">
+                                    {{ category.category|default:"Sin categoría" }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="fw-bold">{{ category.count }}</span>
+                            </td>
+                            <td>${{ category.avg_starting_bid|floatformat:2 }}</td>
+                            <td>${{ category.avg_current_bid|floatformat:2 }}</td>
+                            <td>{{ category.total_bids }}</td>
+                            <td>{{ category.avg_bids_per_listing|floatformat:1 }}</td>
+                            <td>
+                                {% widthratio category.count basic_metrics.total_listings 100 as percentage %}
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar" role="progressbar" 
+                                         style="width: {{ percentage }}%" 
+                                         aria-valuenow="{{ percentage }}" 
+                                         aria-valuemin="0" aria-valuemax="100">
+                                        {{ percentage|floatformat:1 }}%
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">No hay datos de categorías</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Análisis de usuarios -->
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <div class="table-container">
+            <h5 class="mb-3">
+                <i class="fas fa-trophy text-warning"></i>
+                Top 10 Pujadores
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Usuario</th>
+                            <th>Pujas</th>
+                            <th>Monto Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in user_analysis.top_bidders|slice:":10" %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center me-2 icon-sm">
+                                        <span class="text-white fw-bold small">{{ user.username|first|upper }}</span>
+                                    </div>
+                                    {{ user.username }}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-warning badge-custom">{{ user.bid_count }}</span>
+                            </td>
+                            <td>${{ user.total_bid_amount|floatformat:2 }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">No hay datos de pujadores</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6 mb-4">
+        <div class="table-container">
+            <h5 class="mb-3">
+                <i class="fas fa-chart-line text-info"></i>
+                Usuarios Más Activos
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Usuario</th>
+                            <th>Actividad</th>
+                            <th>Watchlist</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in user_analysis.user_engagement|slice:":10" %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>
+                                <span class="badge bg-info badge-custom">{{ user.total_activity }}</span>
+                            </td>
+                            <td>{{ user.watchlist_count }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">No hay datos de engagement</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Resumen ejecutivo -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-file-alt text-primary"></i>
+                    Resumen Ejecutivo
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Métricas de Rendimiento</h6>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Tasa de Conversión
+                                <span class="badge bg-primary badge-custom">
+                                    {{ basic_metrics.conversion_rate|floatformat:1 }}%
+                                </span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Valor Promedio por Subasta
+                                <span class="badge bg-success badge-custom">
+                                    ${{ basic_metrics.avg_auction_value|floatformat:2 }}
+                                </span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Total de Comentarios
+                                <span class="badge bg-info badge-custom">
+                                    {{ basic_metrics.total_comments }}
+                                </span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Items en Watchlist
+                                <span class="badge bg-warning badge-custom">
+                                    {{ basic_metrics.total_watchlist_items }}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Recomendaciones</h6>
+                        <div class="alert alert-info">
+                            <i class="fas fa-lightbulb"></i>
+                            <strong>Basado en el análisis de datos:</strong>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <i class="fas fa-arrow-up text-success me-2"></i>
+                                {% if basic_metrics.conversion_rate > 50 %}
+                                    Excelente tasa de conversión. Considera expandir las categorías más exitosas.
+                                {% else %}
+                                    La tasa de conversión puede mejorarse. Revisa las subastas sin pujas.
+                                {% endif %}
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-users text-info me-2"></i>
+                                {% if basic_metrics.total_users > 100 %}
+                                    Gran base de usuarios. Considera implementar programas de fidelización.
+                                {% else %}
+                                    Enfócate en el crecimiento de usuarios. Implementa estrategias de marketing.
+                                {% endif %}
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-chart-line text-warning me-2"></i>
+                                Monitorea las tendencias mensuales para identificar patrones estacionales.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+    // Gráfico de análisis temporal
+    const timeData = {{ time_analysis|safe }};
+    const listingsData = timeData.listings || [];
+    const bidsData = timeData.bids || [];
+    const usersData = timeData.users || [];
+    
+    const timeCtx = document.getElementById('timeAnalysisChart').getContext('2d');
+    new Chart(timeCtx, {
+        type: 'line',
+        data: {
+            labels: listingsData.map(item => item.day),
+            datasets: [{
+                label: 'Subastas Creadas',
+                data: listingsData.map(item => item.count),
+                borderColor: '#36A2EB',
+                backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                tension: 0.4
+            }, {
+                label: 'Pujas Realizadas',
+                data: bidsData.map(item => item.count),
+                borderColor: '#4BC0C0',
+                backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                tension: 0.4
+            }, {
+                label: 'Usuarios Registrados',
+                data: usersData.map(item => item.count),
+                borderColor: '#FF6384',
+                backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top'
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

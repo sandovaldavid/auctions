@@ -1,637 +1,583 @@
-/* Auction Details Main Container */
+/* =================================
+   AUCTION DETAIL PAGE STYLES
+   ================================= */
+
+/* Main container for auction details */
 .auction-details {
-	max-width: 1200px;
-	margin: 0 auto;
-	animation: fadeIn 0.5s ease-out;
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease-out;
 }
 
-/* Back Button */
+/* Back navigation button */
 .back-button {
-	font-weight: 500;
-	border-radius: 8px;
-	display: inline-flex;
-	align-items: center;
-	transition: all 0.3s ease;
-	color: var(--text-secondary);
-	border-color: var(--border-color);
+    font-weight: var(--font-medium);
+    border-radius: var(--radius-lg);
+    display: inline-flex;
+    align-items: center;
+    transition: var(--transition-all);
+    color: var(--text-secondary);
+    border-color: var(--border-medium);
 }
 
 .back-button:hover {
-	transform: translateX(-5px);
-	background-color: var(--bg-hover);
-	color: var(--primary-color);
+    transform: translateX(-5px);
+    background-color: var(--primary-50);
+    color: var(--primary-500);
 }
 
-/* Main Card */
+/* Main card holding auction info */
 .auction-main {
-	border-radius: 15px;
-	overflow: hidden;
-	background: var(--card-bg);
-	border: 1px solid var(--border-light);
-	box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-lg);
 }
 
-/* Image Container */
+/* Image container */
 .auction-image-container {
-	position: relative;
-	overflow: hidden;
-	align-content: center;
+    position: relative;
+    overflow: hidden;
+    align-content: center;
 }
 
 .auction-detail-image {
-	width: 100%;
-	height: 600px;
-	object-fit: cover;
-	object-position: center;
-	transition: all 0.5s ease;
-	padding-left: 1.25rem;
+    width: 100%;
+    height: 600px;
+    object-fit: cover;
+    object-position: center;
+    transition: all 0.5s ease;
+    padding-left: var(--space-5);
 }
 
 .auction-detail-image:hover {
-	transform: scale(1.03);
+    transform: scale(1.03);
 }
 
-/* No Image Placeholder */
+/* Placeholder for when no image is available */
 .no-image-placeholder {
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	color: var(--text-muted);
-	background-color: var(--bg-secondary);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    background-color: var(--bg-secondary);
 }
 
-/* Category Badge */
+/* Category badge on image */
 .category-badge {
-	position: absolute;
-	bottom: 15px;
-	left: 15px;
-	z-index: 2;
+    position: absolute;
+    bottom: var(--space-4);
+    left: var(--space-4);
+    z-index: 2;
 }
 
 .category-badge .badge {
-	background: var(--bg-main-form);
-	color: var(--text-primary);
-	padding: 0.5rem 1rem;
-	font-size: 0.9rem;
-	border-radius: 20px;
-	box-shadow: var(--shadow-md);
-	backdrop-filter: blur(5px);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(5px);
 }
 
-/* Auction Content Section */
+/* Main content area next to image */
 .auction-content {
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	padding: 2rem !important;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-8) !important;
 }
 
-/* Status Badges */
+/* Status badges (e.g., Active, Closed) */
 .status-badges {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.5rem;
-	margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
 }
 
-/* Title */
+/* Auction title */
 .auction-title {
-	font-size: 2rem;
-	font-weight: 700;
-	color: var(--text-primary);
-	margin: 0;
-	line-height: 1.3;
-	margin-right: 1rem;
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin: 0;
+    line-height: var(--leading-tight);
+    margin-right: var(--space-4);
 }
 
-/* Auction Actions */
+/* Container for action buttons */
 .auction-actions {
-	margin-left: auto;
+    margin-left: auto;
 }
 
-/* Price Section */
+/* Price display section */
 .price-section {
-	background: linear-gradient(145deg, var(--bg-secondary), var(--bg-main));
-	border-radius: 15px;
-	padding: 1.5rem;
-	margin-bottom: 1.5rem;
-	border: 1px solid var(--border-light);
-	box-shadow: var(--shadow-sm);
+    background: linear-gradient(145deg, var(--bg-secondary), var(--bg-primary));
+    border-radius: var(--radius-2xl);
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
 }
 
 .current-price {
-	margin-bottom: 1rem;
-	position: relative;
+    margin-bottom: var(--space-4);
+    position: relative;
 }
 
 .price-label {
-	display: block;
-	color: var(--text-muted);
-	font-size: 0.9rem;
-	margin-bottom: 0.25rem;
+    display: block;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-1);
 }
 
 .price-amount {
-	font-size: 2.25rem;
-	font-weight: 700;
-	color: var(--price-color);
-	display: inline-block;
+    font-size: var(--text-4xl);
+    font-weight: var(--font-bold);
+    color: var(--success);
+    display: inline-block;
 }
 
 .starting-amount {
-	font-size: 1.25rem;
-	font-weight: 600;
-	color: var(--text-secondary);
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-secondary);
 }
 
 .bids-count {
-	font-size: 0.9rem;
-	color: var(--bid-color);
-	font-weight: 600;
-	background: var(--bg-hover);
-	padding: 0.25rem 0.75rem;
-	border-radius: 20px;
-	margin-left: 1rem;
-	vertical-align: middle;
+    font-size: var(--text-sm);
+    color: var(--bid-current);
+    font-weight: var(--font-semibold);
+    background: var(--primary-50);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    margin-left: var(--space-4);
+    vertical-align: middle;
 }
 
-/* Bid Form */
+/* Bid submission form */
 .bid-form {
-	background-color: var(--bg-secondary);
-	padding: 1.5rem;
-	border-radius: 12px;
-	margin-bottom: 1.5rem;
-	border: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+    padding: var(--space-6);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--space-6);
+    border: 1px solid var(--border-medium);
 }
 
 .form-label {
-	color: var(--text-primary);
-	margin-bottom: 0.75rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
 }
 
 .input-group {
-	border-radius: 8px;
-	overflow: hidden;
-	box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
 }
 
 .input-group-text {
-	background-color: var(--bg-main);
-	border: 2px solid var(--primary-color);
-	border-right: none;
-	color: var(--primary-color);
-	font-weight: 600;
+    background-color: var(--bg-primary);
+    border: 2px solid var(--primary-500);
+    border-right: none;
+    color: var(--primary-500);
+    font-weight: var(--font-semibold);
 }
 
 .form-control {
-	border: 2px solid var(--primary-color);
-	border-left: none;
-	border-right: none;
-	padding: 0.75rem 1rem;
-	color: var(--text-primary);
-	background-color: var(--bg-main-form);
+    border: 2px solid var(--primary-500);
+    border-left: none;
+    border-right: none;
+    padding: var(--space-3) var(--space-4);
+    color: var(--text-primary);
+    background-color: var(--bg-secondary);
 }
 
 .form-control:focus {
-	box-shadow: none;
-	border-color: var(--primary-color);
-	background-color: var(--bg-main);
+    box-shadow: none;
+    border-color: var(--primary-500);
+    background-color: var(--bg-primary);
 }
 
 .form-text {
-	color: var(--text-muted);
-	font-size: 0.875rem;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
 }
 
 .bid-button {
-	padding-left: 1.5rem;
-	padding-right: 1.5rem;
-	border-radius: 0 8px 8px 0;
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
 }
 
-/* Owner Actions */
+/* Actions for the auction owner */
 .owner-actions {
-	margin-top: 1rem;
-	padding: 1.5rem;
-	background-color: var(--bg-secondary);
-	border-radius: 12px;
-	border: 1px solid var(--border-color);
+    margin-top: var(--space-4);
+    padding: var(--space-6);
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-medium);
 }
 
 .owner-note {
-	color: var(--text-secondary);
-	font-size: 0.875rem;
-	text-align: center;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    text-align: center;
 }
 
-/* Winner Banner */
+/* Banner for the winner */
 .winner-banner {
-	background: linear-gradient(to right, var(--warning-color), #f97316);
-	color: var(--text-primary);
-	padding: 1rem;
-	border-radius: 12px;
-	font-weight: 500;
-	text-align: center;
-	box-shadow: var(--shadow-md);
-	animation: pulse 2s infinite;
+    background: linear-gradient(to right, var(--warning), #f97316);
+    color: var(--text-primary);
+    padding: var(--space-4);
+    border-radius: var(--radius-xl);
+    font-weight: var(--font-medium);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    animation: pulse 2s infinite;
 }
 
-/* Info Grid */
+/* Grid for extra info (seller, date, etc.) */
 .info-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-	gap: 1rem;
-	margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--space-4);
+    margin-top: var(--space-8);
 }
 
 .info-item {
-	display: flex;
-	align-items: center;
-	gap: 0.75rem;
-	color: var(--text-secondary);
-	padding: 0.75rem;
-	background: var(--bg-secondary);
-	border-radius: 10px;
-	border: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--text-secondary);
+    padding: var(--space-3);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
 }
 
 .info-item i {
-	color: var(--primary-color);
+    color: var(--primary-500);
 }
 
-/* Description Card */
+/* Card for item description */
 .description-card {
-	border-radius: 15px;
-	border: 1px solid var(--border-light);
-	overflow: hidden;
+    border-radius: var(--radius-2xl);
+    border: 1px solid var(--border-light);
+    overflow: hidden;
 }
 
 .description-card .card-title {
-	color: var(--text-primary);
-	font-size: 1.5rem;
-	font-weight: 600;
-	margin-bottom: 1.25rem;
-	border-bottom: 1px solid var(--border-light);
-	padding-bottom: 1rem;
+    color: var(--text-primary);
+    font-size: var(--text-xl);
+    font-weight: var(--font-semibold);
+    margin-bottom: var(--space-5);
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: var(--space-4);
 }
 
 .description-card .card-text {
-	color: var(--text-primary);
-	line-height: 1.7;
-	font-size: 1.05rem;
+    color: var(--text-primary);
+    line-height: var(--leading-relaxed);
+    font-size: 1.05rem;
 }
 
-/* Comments Section */
+/* Comments section */
 .comments-section {
-	border-radius: 15px;
-	border: 1px solid var(--border-light);
+    border-radius: var(--radius-2xl);
+    border: 1px solid var(--border-light);
 }
 
 .comments-title {
-	font-size: 1.5rem;
-	font-weight: 700;
-	color: var(--text-primary);
-	margin-bottom: 1.25rem;
-	border-bottom: 1px solid var(--border-light);
-	padding-bottom: 1rem;
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-5);
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: var(--space-4);
 }
 
 .comment-card {
-	background: var(--bg-secondary);
-	border-radius: 10px;
-	padding: 1.25rem;
-	margin-bottom: 1rem;
-	border: 1px solid var(--border-light);
-	transition: transform 0.3s ease;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    margin-bottom: var(--space-4);
+    border: 1px solid var(--border-light);
+    transition: var(--transition-normal);
 }
 
 .comment-card:hover {
-	transform: translateY(-3px);
-	box-shadow: var(--shadow-sm);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-sm);
 }
 
 .comment-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 0.75rem;
-	color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3);
+    color: var(--text-secondary);
 }
 
 .comment-user {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-	font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: var(--font-semibold);
 }
 
 .comment-user i {
-	color: var(--primary-color);
+    color: var(--primary-500);
 }
 
 .comment-date {
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     color: var(--text-muted);
-    background-color: var(--bg-secondary);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+    background-color: var(--bg-tertiary);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-md);
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    transition: all 0.3s ease;
+    transition: var(--transition-all);
 }
 
 .comment-date:hover {
-    background-color: var(--bg-hover);
-    color: var(--primary-color);
+    background-color: var(--primary-100);
+    color: var(--primary-600);
 }
 
 .comment-date i {
-    color: var(--primary-color);
+    color: var(--primary-500);
     font-size: 0.8rem;
 }
 
 .comment-body {
-	color: var(--text-primary);
-	line-height: 1.6;
+    color: var(--text-primary);
+    line-height: var(--leading-normal);
 }
 
-/* Empty Comments */
+/* Placeholder for when there are no comments */
 .empty-comments {
-	text-align: center;
-	padding: 3rem;
-	color: var(--text-muted);
-	background-color: var(--bg-secondary);
-	border-radius: 12px;
-	border: 1px dashed var(--border-color);
+    text-align: center;
+    padding: var(--space-12);
+    color: var(--text-muted);
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-xl);
+    border: 1px dashed var(--border-medium);
 }
 
 .empty-comments i {
-	font-size: 3rem;
-	margin-bottom: 1rem;
-	opacity: 0.7;
+    font-size: var(--text-5xl);
+    margin-bottom: var(--space-4);
+    opacity: 0.7;
 }
 
-/* Comment Form */
+/* Form for adding a new comment */
 .comment-form {
-	margin-bottom: 2rem;
+    margin-bottom: var(--space-8);
 }
 
 .comment-form textarea {
-	background: var(--bg-secondary);
-	border: 2px solid var(--border-color);
-	border-radius: 12px;
-	padding: 1rem;
-	min-height: 120px;
-	color: var(--text-primary);
-	font-size: 0.95rem;
-	line-height: 1.5;
-	transition: all 0.3s ease;
-	resize: none;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-medium);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    min-height: 120px;
+    color: var(--text-primary);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    transition: var(--transition-all);
+    resize: none;
 }
 
 .comment-form textarea:focus {
-	border-color: var(--primary-color);
-	box-shadow: 0 0 0 0.25rem rgba(15, 91, 171, 0.15);
-	background: var(--bg-main);
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 0.25rem rgba(from var(--primary-500) r g b / 0.15);
+    background: var(--bg-primary);
 }
 
 .comment-form textarea::placeholder {
-	color: var(--text-muted);
-	opacity: 0.8;
+    color: var(--text-muted);
+    opacity: 0.8;
 }
 
-/* Post Comment Button */
+/* Post comment button */
 .comment-form .btn-primary {
-	background: var(--gradient-primary);
-	border: none;
-	padding: 0.8rem 1.5rem;
-	font-weight: 500;
-	border-radius: 10px;
-	transition: all 0.3s ease;
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5rem;
+    background: var(--nav-gradient);
+    border: none;
+    padding: var(--space-3) var(--space-6);
+    font-weight: var(--font-medium);
+    border-radius: var(--radius-lg);
+    transition: var(--transition-all);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
 }
 
 .comment-form .btn-primary:hover {
-	transform: translateY(-2px);
-	box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
-/* Watchlist Button */
+/* Watchlist button styling */
 .btn-outline-heart {
-	color: var(--danger-color);
-	border: 2px solid var(--danger-color);
-	background: transparent;
-	padding: 0.6rem 1.2rem;
-	border-radius: 25px;
-	font-weight: 500;
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5rem;
-	transition: all 0.3s ease;
+    color: var(--error);
+    border: 2px solid var(--error);
+    background: transparent;
+    padding: var(--space-2) var(--space-5);
+    border-radius: var(--radius-full);
+    font-weight: var(--font-medium);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    transition: var(--transition-all);
 }
 
 .btn-outline-heart i {
-	font-size: 1.1rem;
-	transition: transform 0.3s ease;
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
 }
 
 .btn-outline-heart:hover {
-	background: var(--danger-color);
-	color: white;
-	transform: translateY(-2px);
-	box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+    background: var(--error);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(from var(--error) r g b / 0.3);
 }
 
 .btn-outline-heart:hover i {
-	transform: scale(1.2);
+    transform: scale(1.2);
 }
 
-/* Active State (When in Watchlist) */
+/* Active state for watchlist button */
 .btn-outline-heart.active {
-	background: var(--danger-color);
-	color: white;
+    background: var(--error);
+    color: var(--white);
 }
 
 .btn-outline-heart.active:hover {
-	background: #c0392b;
-	border-color: #c0392b;
+    background: var(--error-dark);
+    border-color: var(--error-dark);
 }
 
-/* Dark Mode Support */
-[data-theme='dark'] .auction-main,
-[data-theme='dark'] .description-card,
-[data-theme='dark'] .comments-section {
-	background-color: var(--card-bg);
-	border-color: var(--border-color);
-}
-
-[data-theme='dark'] .price-section {
-	background: linear-gradient(
-		145deg,
-		rgba(30, 41, 59, 0.8),
-		rgba(15, 23, 42, 0.8)
-	);
-	border-color: var(--border-color);
-}
-
-[data-theme='dark'] .input-group-text {
-	background-color: rgba(59, 130, 246, 0.2);
-	border-color: var(--primary-color);
-	color: var(--primary-light);
-}
-
-[data-theme='dark'] .form-control {
-	background-color: var(--bg-secondary-form);
-	border-color: var(--primary-color);
-	color: var(--text-primary);
-}
-
-[data-theme='dark'] .bid-form,
-[data-theme='dark'] .owner-actions,
-[data-theme='dark'] .info-item,
-[data-theme='dark'] .comment-card,
-[data-theme='dark'] .empty-comments {
-	background-color: rgba(30, 41, 59, 0.5);
-	border-color: var(--border-color);
-}
-
-[data-theme='dark'] .winner-banner {
-	background: linear-gradient(to right, #d97706, #c2410c);
-	color: white;
-}
-
-[data-theme='dark'] .btn-outline-heart {
-	border-color: #e74c3c;
-	color: #e74c3c;
-}
-
-[data-theme='dark'] .btn-outline-heart:hover,
-[data-theme='dark'] .btn-outline-heart.active {
-	background: #e74c3c;
-	color: #ecf0f1;
-}
-
-[data-theme='dark'] .btn-outline-heart.active:hover {
-	background: #c0392b;
-	border-color: #c0392b;
-	color: #ecf0f1;
-}
+/* Dark Mode Overrides are handled in variables.css */
 
 /* Responsive Design */
 @media (max-width: 992px) {
-	.auction-image-container {
-		height: 400px;
-	}
+    .auction-image-container {
+        height: 400px;
+    }
 
-	.auction-content {
-		padding: 1.5rem !important;
-	}
+    .auction-content {
+        padding: var(--space-6) !important;
+    }
 
-	.auction-title {
-		font-size: 1.75rem;
-	}
+    .auction-title {
+        font-size: var(--text-2xl);
+    }
 
-	.price-amount {
-		font-size: 1.75rem;
-	}
+    .price-amount {
+        font-size: var(--text-2xl);
+    }
 }
 
 @media (max-width: 768px) {
-	.auction-image-container {
-		align-content: normal;
-		object-fit: cover;
-	}
+    .auction-image-container {
+        align-content: normal;
+        object-fit: cover;
+    }
 
-	.info-grid {
-		grid-template-columns: 1fr;
-	}
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
 
-	.comment-header {
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 0.5rem;
-	}
+    .comment-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-2);
+    }
 
-	.comment-form textarea {
-		min-height: 100px;
-		font-size: 0.9rem;
-		padding: 0.75rem;
-	}
+    .comment-form textarea {
+        min-height: 100px;
+        font-size: var(--text-sm);
+        padding: var(--space-3);
+    }
 
-	.comment-form .btn-primary {
-		width: 100%;
-		justify-content: center;
-		padding: 0.75rem;
-	}
-	.auction-detail-image{
-		padding-left: 0;
-	}
+    .comment-form .btn-primary {
+        width: 100%;
+        justify-content: center;
+        padding: var(--space-3);
+    }
+    .auction-detail-image{
+        padding-left: 0;
+    }
 }
 
 @media (max-width: 576px) {
-	.auction-image-container {
-		object-fit: cover;
-	}
+    .auction-image-container {
+        object-fit: cover;
+    }
 
-	.auction-content {
-		padding: 1rem !important;
-	}
+    .auction-content {
+        padding: var(--space-4) !important;
+    }
 
-	.auction-title {
-		font-size: 1.5rem;
-		margin-bottom: 0.5rem;
-	}
+    .auction-title {
+        font-size: var(--text-xl);
+        margin-bottom: var(--space-2);
+    }
 
-	.btn-outline-heart {
-		padding: 0.5rem 1rem;
-		font-size: 0.9rem;
-	}
+    .btn-outline-heart {
+        padding: var(--space-2) var(--space-4);
+        font-size: var(--text-sm);
+    }
 
-	.watchlist-text {
-		display: none;
-	}
+    .watchlist-text {
+        display: none;
+    }
 
-	.btn-outline-heart i {
-		margin: 0;
-		font-size: 1rem;
-	}
+    .btn-outline-heart i {
+        margin: 0;
+        font-size: 1rem;
+    }
 
-	.price-section,
-	.bid-form,
-	.owner-actions {
-		padding: 1rem;
-		border-radius: 10px;
-	}
+    .price-section,
+    .bid-form,
+    .owner-actions {
+        padding: var(--space-4);
+        border-radius: var(--radius-lg);
+    }
 
-	.price-amount {
-		font-size: 1.5rem;
-	}
+    .price-amount {
+        font-size: var(--text-xl);
+    }
 
-	.bids-count {
-		display: block;
-		margin: 0.5rem 0 0 0;
-	}
+    .bids-count {
+        display: block;
+        margin: var(--space-2) 0 0 0;
+    }
 
-	.comments-title,
-	.card-title {
-		font-size: 1.25rem;
-	}
+    .comments-title,
+    .card-title {
+        font-size: var(--text-lg);
+    }
 
-	.empty-comments {
-		padding: 2rem 1rem;
-	}
+    .empty-comments {
+        padding: var(--space-8) var(--space-4);
+    }
 
-	.empty-comments i {
-		font-size: 2.5rem;
-	}
+    .empty-comments i {
+        font-size: var(--text-4xl);
+    }
 
-	.comment-date {
-        font-size: 0.75rem;
+    .comment-date {
+        font-size: var(--text-xs);
         padding: 0.2rem 0.4rem;
     }
 }

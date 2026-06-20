@@ -2,6 +2,11 @@
 {% load static %}
 
 {% block title %}Add Auction{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/pages/new_auction.css' %}" rel="stylesheet" />
+{% endblock %}
+
 {% block body %}
     {% include "auctions/components/alert.html" %}
     <div class="container py-5">

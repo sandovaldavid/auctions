@@ -1,0 +1,361 @@
+{% extends "auctions/admin/base.html" %}
+{% load static %}
+
+{% block admin_content %}
+<!-- Análisis de categorías -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="chart-container">
+            <h5 class="mb-3">
+                <i class="fas fa-chart-bar text-primary"></i>
+                Análisis por Categorías
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>Total Subastas</th>
+                            <th>Precio Promedio Inicial</th>
+                            <th>Precio Promedio Actual</th>
+                            <th>Total Pujas</th>
+                            <th>Pujas por Subasta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in category_analysis %}
+                        <tr>
+                            <td>
+                                <span class="badge bg-primary badge-custom">
+                                    {{ category.category|default:"Sin categoría" }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="fw-bold">{{ category.count }}</span>
+                            </td>
+                            <td>${{ category.avg_starting_bid|floatformat:2 }}</td>
+                            <td>${{ category.avg_current_bid|floatformat:2 }}</td>
+                            <td>{{ category.total_bids }}</td>
+                            <td>{{ category.avg_bids_per_listing|floatformat:1 }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">No hay datos de categorías</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Análisis de comportamiento de usuarios -->
+<div class="row mb-4">
+    <div class="col-lg-6 mb-4">
+        <div class="table-container">
+            <h5 class="mb-3">
+                <i class="fas fa-users text-success"></i>
+                Top Pujadores
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Total Pujas</th>
+                            <th>Monto Total Pujado</th>
+                            <th>Subastas Creadas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in user_behavior.top_bidders %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-success rounded-circle d-flex align-items-center justify-content-center me-2 icon-md">
+                                        <span class="text-white fw-bold">{{ user.username|first|upper }}</span>
+                                    </div>
+                                    {{ user.username }}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-success badge-custom">{{ user.bid_count }}</span>
+                            </td>
+                            <td>${{ user.total_bid_amount|floatformat:2 }}</td>
+                            <td>{{ user.listings_created }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">No hay datos de pujadores</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6 mb-4">
+        <div class="table-container">
+            <h5 class="mb-3">
+                <i class="fas fa-chart-line text-info"></i>
+                Engagement de Usuarios
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Actividad Total</th>
+                            <th>Items en Watchlist</th>
+                            <th>Nivel de Engagement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in user_behavior.user_engagement|slice:":10" %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>
+                                <span class="badge bg-info badge-custom">{{ user.total_activity }}</span>
+                            </td>
+                            <td>{{ user.watchlist_count }}</td>
+                            <td>
+                                {% if user.total_activity > 50 %}
+                                    <span class="badge bg-success badge-custom">Alto</span>
+                                {% elif user.total_activity > 20 %}
+                                    <span class="badge bg-warning badge-custom">Medio</span>
+                                {% else %}
+                                    <span class="badge bg-secondary badge-custom">Bajo</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">No hay datos de engagement</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Análisis de pujas -->
+<div class="row mb-4">
+    <div class="col-lg-6 mb-4">
+        <div class="chart-container">
+            <h5 class="mb-3">
+                <i class="fas fa-chart-pie text-warning"></i>
+                Distribución de Pujas por Rango
+            </h5>
+            <canvas id="bidDistributionChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+    
+    <div class="col-lg-6 mb-4">
+        <div class="table-container">
+            <h5 class="mb-3">
+                <i class="fas fa-trophy text-danger"></i>
+                Subastas Más Competitivas
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Pujas</th>
+                            <th>Aumento %</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for listing in bid_analysis.listing_competition|slice:":10" %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'admin_listing_detail' listing.id %}" class="text-decoration-none">
+                                    {{ listing.title|truncatechars:30 }}
+                                </a>
+                            </td>
+                            <td>
+                                <span class="badge bg-danger badge-custom">{{ listing.bid_count }}</span>
+                            </td>
+                            <td>
+                                {% if listing.bid_increase %}
+                                    <span class="text-success fw-bold">+{{ listing.bid_increase|floatformat:1 }}%</span>
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if listing.active %}
+                                    <span class="badge bg-success badge-custom">Activa</span>
+                                {% else %}
+                                    <span class="badge bg-secondary badge-custom">Inactiva</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">No hay datos de competencia</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tendencias del mercado -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="chart-container">
+            <h5 class="mb-3">
+                <i class="fas fa-chart-area text-primary"></i>
+                Tendencias Mensuales del Mercado
+            </h5>
+            <canvas id="marketTrendsChart" width="800" height="300"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Análisis estacional -->
+<div class="row">
+    <div class="col-12">
+        <div class="chart-container">
+            <h5 class="mb-3">
+                <i class="fas fa-calendar-alt text-success"></i>
+                Patrones Estacionales
+            </h5>
+            <canvas id="seasonalChart" width="800" height="200"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+    // Gráfico de distribución de pujas
+    const bidDistributionData = {{ bid_analysis.bid_distribution | safe }};
+    const bidLabels = bidDistributionData.map(item => item.range);
+    const bidCounts = bidDistributionData.map(item => item.count);
+    
+    const bidDistributionCtx = document.getElementById('bidDistributionChart').getContext('2d');
+    new Chart(bidDistributionCtx, {
+        type: 'doughnut',
+        data: {
+            labels: bidLabels,
+            datasets: [{
+                data: bidCounts,
+                backgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56',
+                    '#4BC0C0',
+                    '#9966FF'
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+
+    // Gráfico de tendencias del mercado
+    const marketTrendsData = {{ market_trends.monthly_trends|safe }};
+    const months = marketTrendsData.map(item => item.month);
+    const listingsCount = marketTrendsData.map(item => item.listings_count);
+    const avgStartingBid = marketTrendsData.map(item => item.avg_starting_bid);
+    const totalBids = marketTrendsData.map(item => item.total_bids);
+    
+    const marketTrendsCtx = document.getElementById('marketTrendsChart').getContext('2d');
+    new Chart(marketTrendsCtx, {
+        type: 'line',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Subastas',
+                data: listingsCount,
+                borderColor: '#36A2EB',
+                backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                tension: 0.4
+            }, {
+                label: 'Precio Promedio Inicial',
+                data: avgStartingBid,
+                borderColor: '#FF6384',
+                backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                tension: 0.4,
+                yAxisID: 'y1'
+            }, {
+                label: 'Total Pujas',
+                data: totalBids,
+                borderColor: '#4BC0C0',
+                backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                }
+            }
+        }
+    });
+
+    // Gráfico de patrones estacionales
+    const seasonalData = {{ market_trends.seasonal_patterns|safe }};
+    const seasonalMonths = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 
+                           'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    const seasonalCounts = new Array(12).fill(0);
+    
+    seasonalData.forEach(item => {
+        const monthIndex = parseInt(item.month) - 1;
+        seasonalCounts[monthIndex] = item.count;
+    });
+    
+    const seasonalCtx = document.getElementById('seasonalChart').getContext('2d');
+    new Chart(seasonalCtx, {
+        type: 'bar',
+        data: {
+            labels: seasonalMonths,
+            datasets: [{
+                label: 'Subastas por Mes',
+                data: seasonalCounts,
+                backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                borderColor: '#4BC0C0',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

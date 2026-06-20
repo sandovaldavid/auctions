@@ -14,7 +14,35 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-urlpatterns = [path("admin/", admin.site.urls), path("", include("auctions.urls"))]
+from auctions.error_views import (
+    custom_400_view,
+    custom_403_view,
+    custom_404_view,
+    custom_500_view,
+)
+
+urlpatterns = [
+    path("", include("auctions.urls")),
+    path("admin", admin.site.urls),
+]
+
+# Servir archivos estáticos en desarrollo
+if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
+    urlpatterns += static(
+        settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0]
+    )
+
+# Configurar manejadores de errores personalizados
+# Estos deben estar definidos a nivel de módulo para que Django los reconozca
+handler404 = custom_404_view
+handler500 = custom_500_view
+handler403 = custom_403_view
+handler400 = custom_400_view

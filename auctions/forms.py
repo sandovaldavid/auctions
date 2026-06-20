@@ -3,7 +3,7 @@ import re
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Listing, Bid, Comment
+from .models import Bid, Comment, Listing
 
 
 class ListingForm(forms.ModelForm):
@@ -68,7 +68,6 @@ class BidForm(forms.ModelForm):
 
     def clean_amount(self):
         bid_value = self.cleaned_data.get("amount")
-        print(bid_value)
         if bid_value is None:
             raise forms.ValidationError("The bid value cannot be empty.")
         if bid_value <= 0:
@@ -95,3 +94,9 @@ class CommentForm(forms.ModelForm):
         labels = {
             "text": "Add a comment:",
         }
+
+    def clean_text(self):
+        text = self.cleaned_data.get("text", "").strip()
+        if not text:
+            raise forms.ValidationError("Comment cannot be empty.")
+        return text

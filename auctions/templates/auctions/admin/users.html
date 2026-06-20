@@ -1,0 +1,312 @@
+{% extends "auctions/admin/base.html" %}
+{% load static %}
+
+{% block admin_content %}
+<!-- Filtros y búsqueda -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="search" class="form-label">Buscar Usuario</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               value="{{ search_query }}" placeholder="Nombre de usuario, email, nombre o apellido...">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="sort" class="form-label">Ordenar por</label>
+                        <select class="form-select" id="sort" name="sort">
+                            <option value="-date_joined" {% if sort_by == '-date_joined' %}selected{% endif %}>Más recientes</option>
+                            <option value="date_joined" {% if sort_by == 'date_joined' %}selected{% endif %}>Más antiguos</option>
+                            <option value="-listings_count" {% if sort_by == '-listings_count' %}selected{% endif %}>Más subastas</option>
+                            <option value="-bids_count" {% if sort_by == '-bids_count' %}selected{% endif %}>Más pujas</option>
+                            <option value="-comments_count" {% if sort_by == '-comments_count' %}selected{% endif %}>Más comentarios</option>
+                            <option value="username" {% if sort_by == 'username' %}selected{% endif %}>Usuario A-Z</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">&nbsp;</label>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-custom">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <a href="{% url 'admin_users' %}" class="btn btn-outline-secondary btn-custom">
+                            <i class="fas fa-times"></i> Limpiar Filtros
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabla de usuarios -->
+<div class="row">
+    <div class="col-12">
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">
+                    <i class="fas fa-users text-primary"></i>
+                    Gestión de Usuarios
+                </h5>
+                <span class="text-muted">{{ page_obj.paginator.count }} usuarios encontrados</span>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Email</th>
+                            <th>Nombre</th>
+                            <th>Subastas</th>
+                            <th>Pujas</th>
+                            <th>Comentarios</th>
+                            <th>Watchlist</th>
+                            <th>Registro</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in page_obj %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3 icon-lg">
+                                        <span class="text-white fw-bold">{{ user.username|first|upper }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">{{ user.username }}</div>
+                                        {% if user.is_superuser %}
+                                            <small class="badge bg-danger badge-custom">Superusuario</small>
+                                        {% elif user.is_staff %}
+                                            <small class="badge bg-warning badge-custom">Staff</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {% if user.email %}
+                                    <a href="mailto:{{ user.email }}" class="text-decoration-none">
+                                        {{ user.email }}
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">Sin email</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.first_name or user.last_name %}
+                                    {{ user.first_name }} {{ user.last_name }}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-info badge-custom">{{ user.listings_count }}</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-success badge-custom">{{ user.bids_count }}</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-warning badge-custom">{{ user.comments_count }}</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary badge-custom">{{ user.watchlist_count }}</span>
+                            </td>
+                            <td>
+                                <small class="text-muted">{{ user.date_joined|date:"M d, Y" }}</small>
+                                <br>
+                                <small class="text-muted">{{ user.date_joined|time:"H:i" }}</small>
+                            </td>
+                            <td>
+                                {% if user.is_active %}
+                                    <span class="badge bg-success badge-custom">Activo</span>
+                                {% else %}
+                                    <span class="badge bg-danger badge-custom">Inactivo</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" 
+                                            data-bs-toggle="modal" data-bs-target="#userModal{{ user.id }}"
+                                            data-bs-toggle="tooltip" title="Ver detalles">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    {% if not user.is_superuser %}
+                                        <a href="#" class="btn btn-sm btn-outline-{% if user.is_active %}warning{% else %}success{% endif %}" 
+                                           data-bs-toggle="tooltip" 
+                                           title="{% if user.is_active %}Desactivar{% else %}Activar{% endif %}">
+                                            <i class="fas fa-{% if user.is_active %}user-slash{% else %}user-check{% endif %}"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="10" class="text-center text-muted py-4">
+                                <i class="fas fa-users fa-2x mb-2"></i>
+                                <br>No se encontraron usuarios con los filtros aplicados
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Paginación -->
+            {% if page_obj.has_other_pages %}
+            <nav aria-label="Paginación de usuarios" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+                                <i class="fas fa-angle-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+                                <i class="fas fa-angle-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+                                <i class="fas fa-angle-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modales de detalles de usuario -->
+{% for user in page_obj %}
+<div class="modal fade" id="userModal{{ user.id }}" tabindex="-1" aria-labelledby="userModalLabel{{ user.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userModalLabel{{ user.id }}">
+                    <i class="fas fa-user"></i>
+                    Detalles de {{ user.username }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Información Personal</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <td><strong>Usuario:</strong></td>
+                                <td>{{ user.username }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Email:</strong></td>
+                                <td>{{ user.email|default:"No especificado" }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nombre:</strong></td>
+                                <td>{{ user.first_name|default:"-" }} {{ user.last_name|default:"" }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Registro:</strong></td>
+                                <td>{{ user.date_joined|date:"d/m/Y H:i" }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Último acceso:</strong></td>
+                                <td>{{ user.last_login|date:"d/m/Y H:i"|default:"Nunca" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Estadísticas de Actividad</h6>
+                        <div class="row text-center">
+                            <div class="col-6 mb-3">
+                                <div class="metric-card">
+                                    <div class="metric-value text-primary">{{ user.listings_count }}</div>
+                                    <div class="metric-label">Subastas</div>
+                                </div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div class="metric-card">
+                                    <div class="metric-value text-success">{{ user.bids_count }}</div>
+                                    <div class="metric-label">Pujas</div>
+                                </div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div class="metric-card">
+                                    <div class="metric-value text-warning">{{ user.comments_count }}</div>
+                                    <div class="metric-label">Comentarios</div>
+                                </div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div class="metric-card">
+                                    <div class="metric-value text-info">{{ user.watchlist_count }}</div>
+                                    <div class="metric-label">Watchlist</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                {% if not user.is_superuser %}
+                    <button type="button" class="btn btn-{% if user.is_active %}warning{% else %}success{% endif %}">
+                        <i class="fas fa-{% if user.is_active %}user-slash{% else %}user-check{% endif %}"></i>
+                        {% if user.is_active %}Desactivar{% else %}Activar{% endif %}
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+    // Confirmar cambio de estado de usuario
+    document.querySelectorAll('a[href="#"]').forEach(link => {
+        if (link.querySelector('i').classList.contains('fa-user-slash') || 
+            link.querySelector('i').classList.contains('fa-user-check')) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const action = this.querySelector('i').classList.contains('fa-user-slash') ? 'desactivar' : 'activar';
+                if (confirm(`¿Estás seguro de que quieres ${action} este usuario?`)) {
+                    // Aquí se implementaría la lógica para cambiar el estado
+                    alert('Funcionalidad de cambio de estado no implementada en este ejemplo');
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,325 @@
+{% extends "auctions/admin/base.html" %}
+{% load static %}
+
+{% block admin_content %}
+<!-- Información de la subasta -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        {% if listing.image %}
+                            <img src="{{ listing.image }}" alt="{{ listing.title }}" 
+                                 class="img-fluid rounded img-cover" style="max-height: 300px; width: 100%;">
+                        {% else %}
+                            <div class="bg-secondary rounded d-flex align-items-center justify-content-center" 
+                                 style="height: 300px;">
+                                <i class="fas fa-image fa-3x text-white"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <h2 class="mb-3">{{ listing.title }}</h2>
+                        <p class="text-muted mb-4">{{ listing.description }}</p>
+                        
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h6>Información Básica</h6>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>ID:</strong></td>
+                                        <td>#{{ listing.id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Usuario:</strong></td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2 icon-sm">
+                                                    <span class="text-white fw-bold small">{{ listing.user.username|first|upper }}</span>
+                                                </div>
+                                                {{ listing.user.username }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Categoría:</strong></td>
+                                        <td>
+                                            {% if listing.category %}
+                                                <span class="badge bg-info badge-custom">{{ listing.category }}</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary badge-custom">Sin categoría</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Fecha Creación:</strong></td>
+                                        <td>{{ listing.created|date:"d/m/Y H:i" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Estado:</strong></td>
+                                        <td>
+                                            {% if listing.active %}
+                                                <span class="badge bg-success badge-custom">Activa</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary badge-custom">Inactiva</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6>Información Financiera</h6>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Precio Inicial:</strong></td>
+                                        <td><span class="fw-bold">${{ listing.starting_bid }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Precio Actual:</strong></td>
+                                        <td>
+                                            {% if listing.current_bid %}
+                                                <span class="fw-bold text-success">${{ listing.current_bid }}</span>
+                                            {% else %}
+                                                <span class="text-muted">Sin pujas</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Incremento:</strong></td>
+                                        <td>
+                                            {% if listing.current_bid and listing.starting_bid %}
+                                                <span class="text-success fw-bold">
+                                                    +${{ listing.current_bid|sub:listing.starting_bid|floatformat:2 }}
+                                                    ({{ listing_stats.price_increase|floatformat:1 }}%)
+                                                </span>
+                                            {% else %}
+                                                <span class="text-muted">-</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Pujas:</strong></td>
+                                        <td><span class="badge bg-warning badge-custom">{{ listing_stats.total_bids }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Pujadores Únicos:</strong></td>
+                                        <td><span class="badge bg-info badge-custom">{{ listing_stats.unique_bidders }}</span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <a href="{% url 'admin_toggle_listing_status' listing.id %}" 
+                               class="btn btn-{% if listing.active %}warning{% else %}success{% endif %} btn-custom">
+                                <i class="fas fa-{% if listing.active %}pause{% else %}play{% endif %}"></i>
+                                {% if listing.active %}Desactivar Subasta{% else %}Activar Subasta{% endif %}
+                            </a>
+                            <a href="{% url 'admin_listings' %}" class="btn btn-outline-secondary btn-custom">
+                                <i class="fas fa-arrow-left"></i>
+                                Volver a Subastas
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Análisis predictivo -->
+{% if prediction %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-brain text-primary"></i>
+                    Análisis Predictivo
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if prediction.error %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        {{ prediction.error }}
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="metric-card text-center">
+                                <div class="metric-value text-primary">
+                                    +{{ prediction.predicted_price_increase|floatformat:1 }}%
+                                </div>
+                                <div class="metric-label">Incremento Predicho</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="metric-card text-center">
+                                <div class="metric-value text-info">
+                                    {{ prediction.confidence|title }}
+                                </div>
+                                <div class="metric-label">Confianza</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="metric-card text-center">
+                                <div class="metric-value text-success">
+                                    {{ prediction.recommendations|length }}
+                                </div>
+                                <div class="metric-label">Recomendaciones</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if prediction.recommendations %}
+                    <div class="mt-3">
+                        <h6>Recomendaciones:</h6>
+                        <ul class="list-group">
+                            {% for recommendation in prediction.recommendations %}
+                            <li class="list-group-item">
+                                <i class="fas fa-lightbulb text-warning me-2"></i>
+                                {{ recommendation }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Pujas de la subasta -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="table-container">
+            <h5 class="mb-3">
+                <i class="fas fa-hand-holding-usd text-success"></i>
+                Historial de Pujas
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Usuario</th>
+                            <th>Monto</th>
+                            <th>Fecha</th>
+                            <th>Diferencia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bid in bids %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-success rounded-circle d-flex align-items-center justify-content-center me-2 icon-sm">
+                                        <span class="text-white fw-bold small">{{ bid.user.username|first|upper }}</span>
+                                    </div>
+                                    {{ bid.user.username }}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="fw-bold text-success">${{ bid.amount }}</span>
+                            </td>
+                            <td>
+                                <small class="text-muted">{{ bid.listing.created|date:"d/m/Y H:i" }}</small>
+                            </td>
+                            <td>
+                                {% if forloop.first %}
+                                    <span class="text-muted">-</span>
+                                {% else %}
+                                    {% with prev_bid=forloop.counter0|add:"-1" %}
+                                        {% for prev in bids %}
+                                            {% if forloop.counter0 == prev_bid %}
+                                                <span class="text-success">
+                                                    +${{ bid.amount|sub:prev.amount|floatformat:2 }}
+                                                </span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endwith %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                <i class="fas fa-hand-holding-usd fa-2x mb-2"></i>
+                                <br>No hay pujas en esta subasta
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Comentarios de la subasta -->
+<div class="row">
+    <div class="col-12">
+        <div class="table-container">
+            <h5 class="mb-3">
+                <i class="fas fa-comments text-info"></i>
+                Comentarios
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Comentario</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for comment in comments %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-info rounded-circle d-flex align-items-center justify-content-center me-2 icon-sm">
+                                        <span class="text-white fw-bold small">{{ comment.user.username|first|upper }}</span>
+                                    </div>
+                                    {{ comment.user.username }}
+                                </div>
+                            </td>
+                            <td>{{ comment.text }}</td>
+                            <td>
+                                <small class="text-muted">{{ comment.created|date:"d/m/Y H:i" }}</small>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted py-4">
+                                <i class="fas fa-comments fa-2x mb-2"></i>
+                                <br>No hay comentarios en esta subasta
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+    // Confirmar cambio de estado de subasta
+    document.querySelector('a[href*="toggle_listing_status"]').addEventListener('click', function(e) {
+        e.preventDefault();
+        const action = this.querySelector('i').classList.contains('fa-pause') ? 'desactivar' : 'activar';
+        if (confirm(`¿Estás seguro de que quieres ${action} esta subasta?`)) {
+            window.location.href = this.href;
+        }
+    });
+</script>
+{% endblock %}

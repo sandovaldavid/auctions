@@ -1,42 +1,50 @@
 {
-  "name": "Project2_commerce",
-    "build": {
-        "dockerfile": "Dockerfile",
-        "context": ".."
-    },
-    "workspaceFolder": "/workspace",
-	// Configure tool-specific properties.
-	"customizations": {
-      "jetbrains":{
-        "settings":{
-          "org.jetbrains.plugins.terminal:app:TerminalOptionsProvider.myShellPath":"/usr/bin/zsh",
-          "com.intellij:app:BuiltInServerOptions.builtInServerPort":59550,
-          "com.intellij:app:HttpConfigurable.use_proxy_pac":true
+  "name": "Auctions - Django Dev",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "workspaceFolder": "/workspace",
+  "postCreateCommand": "pip install -r requirements-dev.txt && playwright install chromium --with-deps",
+  "forwardPorts": [8000, 5432],
+  "portsAttributes": {
+    "8000": { "label": "Django", "onAutoForward": "notify" },
+    "5432": { "label": "PostgreSQL", "onAutoForward": "silent" }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 4,
+        "editor.rulers": [88],
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter",
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+          }
         }
       },
-		// Configure properties specific to VS Code.
-		"vscode": {
-			// Set *default* container specific settings.json values on container create.
-			"settings": {
-				"python.defaultInterpreterPath": "/usr/local/bin/python",
-                "terminal.integrated.defaultProfile.linux": "zsh",
-                "python.linting.pylintEnabled": true,
-                "terminal.integrated.shell.linux": "/bin/zsh",
-                "terminal.integrated.shellArgs.linux": ["-l"],
-                "terminal.integrated.fontSize": 14,
-                "editor.fontLigatures": true,
-                "editor.fontSize": 14,
-                "editor.formatOnSave": true,
-                "editor.tabSize": 4,
-                "editor.wordWrap": "on",
-                "editor.rulers": [80, 120],
-                "editor.renderWhitespace": "all"
-      },
       "extensions": [
-        "ms-python.python"
+        "ms-python.python",
+        "ms-python.mypy-type-checker",
+        "charliermarsh.ruff",
+        "ms-python.black-formatter",
+        "batisteo.vscode-django",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "GitHub.copilot"
       ]
-		}
-	},
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [8000]
+    },
+    "jetbrains": {
+      "settings": {
+        "org.jetbrains.plugins.terminal:app:TerminalOptionsProvider.myShellPath": "/usr/bin/zsh"
+      }
+    }
+  }
 }
