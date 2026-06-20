@@ -1,0 +1,30 @@
+-r requirements.txt
+
+# Testing
+pytest>=8.0
+pytest-django>=4.9
+pytest-cov>=6.0
+pytest-html>=4.1
+pytest-xdist>=3.6
+playwright>=1.44
+pytest-playwright>=0.5
+factory-boy>=3.3
+
+# Linting & type checking
+ruff>=0.6
+black>=24.0
+mypy>=1.11
+django-stubs>=5.1
+bandit>=1.8
+safety>=3.0
+
+# Dev tools
+django-debug-toolbar>=4.4
+django-extensions>=3.2
+ipython>=8.0
+
+# Data / BI (future features)
+pandas>=2.2
+numpy>=1.26
+plotly>=5.17
+scikit-learn>=1.4

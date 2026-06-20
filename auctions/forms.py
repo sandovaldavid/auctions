@@ -68,7 +68,6 @@ class BidForm(forms.ModelForm):
 
     def clean_amount(self):
         bid_value = self.cleaned_data.get("amount")
-        print(bid_value)
         if bid_value is None:
             raise forms.ValidationError("The bid value cannot be empty.")
         if bid_value <= 0:

@@ -1,0 +1,48 @@
+name: Branch & Report Cleanup
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  cleanup:
+    name: Cleanup after PR close
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Delete head branch (if not protected)
+        if: github.event.pull_request.merged == true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          PROTECTED_BRANCHES="main develop v2"
+          if echo "$PROTECTED_BRANCHES" | grep -qw "$BRANCH"; then
+            echo "Branch '$BRANCH' is protected, skipping deletion."
+          else
+            gh api "repos/${{ github.repository }}/git/refs/heads/$BRANCH" --method DELETE && \
+              echo "Deleted branch '$BRANCH'" || \
+              echo "Branch '$BRANCH' already deleted or not found."
+          fi
+
+      - name: Remove PR report from gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete report directory
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          if [ -d "reports/pr-$PR_NUMBER" ]; then
+            rm -rf "reports/pr-$PR_NUMBER"
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "ci: remove test report for closed PR #$PR_NUMBER"
+            git push
+          else
+            echo "No report directory found for PR #$PR_NUMBER"
+          fi

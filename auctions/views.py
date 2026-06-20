@@ -137,7 +137,7 @@ def bid(request, listing_id):
             "auctions/auction.html",
             {"listing": auction, "form": bid_form, "comments": auction.comments.all()},
         )
-    return None
+    return HttpResponseRedirect(reverse("listing", args=[listing_id]))
 
 
 def watchlist(request, listing_id):
@@ -204,7 +204,10 @@ def categories(request):
         "auctions/categories.html",
         {
             "listings": listings,
-            "category_choices": ListingForm.CATEGORY_CHOICES,
+            "category_choices": Listing.objects.filter(active=True)
+            .values_list("category", flat=True)
+            .distinct()
+            .order_by("category"),
             "selected_category": category,
         },
     )
