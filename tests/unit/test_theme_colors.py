@@ -8,9 +8,6 @@ Tests verify that text/background color pairs meet WCAG AA minimums:
 Color values are sourced from auctions/static/css/variables.css.
 """
 
-import pytest
-
-
 def relative_luminance(hex_color: str) -> float:
     """Compute WCAG 2.1 relative luminance from a hex color string."""
     hex_color = hex_color.lstrip("#")
