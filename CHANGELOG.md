@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.2-beta.0](https://github.com/sandovaldavid/auctions/compare/v0.2.1-beta.0...v0.2.2-beta.0) (2026-06-20)
+
+
+### Documentation
+
+* **docs:** document merge vs squash strategy for main→develop backsyncs ([b078e44](https://github.com/sandovaldavid/auctions/commit/b078e44d673037c972e4100806251cebcf4096e2))
+* **docs:** update merge strategy — develop→main uses merge commit not squash ([c9cda73](https://github.com/sandovaldavid/auctions/commit/c9cda73fd583e2f3cb9c4f428794044e5708dd25))
+
 ## [0.2.0](https://github.com/sandovaldavid/auctions/compare/v0.1.1...v0.2.0) (2026-06-20)
 
 
