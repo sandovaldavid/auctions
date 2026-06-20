@@ -66,10 +66,17 @@ Evolución planificada (en fases):
 | `gh-pages` | Reportes de tests | — (rama independiente) |
 
 **Reglas:**
-- Solo **squash merge** en `main` y `develop`
+- **Squash merge** para feature/fix/chore/refactor → `develop` y para `develop` → `main`
+- **Merge commit** (no squash) para el backsync `main` → `develop` — preserva la ancestría de git y permite que release-please ancle su baseline desde los tags de main
 - `main` solo acepta PRs desde `develop`
 - Las ramas se eliminan automáticamente al hacer merge
 - `main`, `develop` y `v2` están protegidas contra eliminación
+
+**Backsync main → develop (después de cada release estable):**
+1. Crear rama `chore/sync-vX.Y.Z` desde `main`
+2. Abrir PR a `develop` con título `chore(develop): sync main vX.Y.Z into develop`
+3. Mergear con **merge commit** (no squash) — en la UI de GitHub: botón "Create a merge commit"
+4. Release-please en develop detectará automáticamente el nuevo baseline desde el tag de main
 
 ---
 
