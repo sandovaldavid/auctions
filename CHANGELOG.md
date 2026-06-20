@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/sandovaldavid/auctions/compare/v0.1.0...v0.2.0) (2026-06-20)
+
+
+### Features
+
+* **auctions:** merge develop into main — v0.1.1 ([#45](https://github.com/sandovaldavid/auctions/issues/45)) ([e4a837b](https://github.com/sandovaldavid/auctions/commit/e4a837b612b9c58729029f69b875deb3424e220b))
+
 ## [0.1.1](https://github.com/sandovaldavid/auctions/compare/v0.1.0...v0.1.1) (2026-06-20)
 
 
