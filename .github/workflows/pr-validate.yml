@@ -41,7 +41,7 @@ jobs:
         continue-on-error: true
 
       - name: Bandit code scan
-        run: bandit -r auctions/ -ll -x auctions/migrations/ --format github
+        run: bandit -r auctions/ -ll -x auctions/migrations/ --format txt
 
   publish-report:
     name: Publish test report to gh-pages
