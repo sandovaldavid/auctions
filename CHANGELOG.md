@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/sandovaldavid/auctions/compare/v0.1.0...v0.1.1) (2026-06-20)
+
+
+### Bug Fixes
+
+* **auctions:** correct WCAG AA contrast ratios in light and dark themes ([#36](https://github.com/sandovaldavid/auctions/issues/36)) ([ca260e7](https://github.com/sandovaldavid/auctions/commit/ca260e7283854e700ff6d9e9d70ebb5cf0e64d91))
+
 ## 0.1.0 (2026-06-20)
 
 
