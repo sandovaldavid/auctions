@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import admin_views, views
+from . import admin_views, error_views, views
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -41,9 +41,9 @@ urlpatterns = [
     path("admin/api/metrics", admin_views.admin_api_metrics, name="admin_api_metrics"),
     path("admin/api/charts", admin_views.admin_api_charts, name="admin_api_charts"),
     # URLs de prueba para errores (solo en desarrollo)
-    path("test/404/", admin_views.test_404_view, name="test_404"),
-    path("test/500/", admin_views.test_500_view, name="test_500"),
-    path("test/403/", admin_views.test_403_view, name="test_403"),
+    path("test/404/", error_views.test_404_view, name="test_404"),
+    path("test/500/", error_views.test_500_view, name="test_500"),
+    path("test/403/", error_views.test_403_view, name="test_403"),
     path("test/admin/", admin_views.test_admin_dashboard, name="test_admin"),
     # Capturar todas las URLs no encontradas (debe estar al final)
     path("<path:path>", admin_views.catch_all_404_view, name="catch_all_404"),
