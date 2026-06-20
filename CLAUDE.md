@@ -66,16 +66,25 @@ Evolución planificada (en fases):
 | `gh-pages` | Reportes de tests | — (rama independiente) |
 
 **Reglas:**
-- **Squash merge** para feature/fix/chore/refactor → `develop` y para `develop` → `main`
-- **Merge commit** (no squash) para el backsync `main` → `develop` — preserva la ancestría de git y permite que release-please ancle su baseline desde los tags de main
+- **Squash merge** para feature/fix/chore/refactor → `develop` — condensa los commits WIP del desarrollo en un commit limpio
+- **Merge commit (--no-ff)** para `develop` → `main` — preserva los commits individuales de develop en main para que release-please calcule versiones correctamente desde los tipos reales (`fix`, `feat`)
+- **Merge commit** para el backsync `main` → `develop` — preserva la ancestría de git y permite que release-please ancle su baseline desde los tags de main
 - `main` solo acepta PRs desde `develop`
 - Las ramas se eliminan automáticamente al hacer merge
 - `main`, `develop` y `v2` están protegidas contra eliminación
 
+**Tipo de merge según operación — elegir en el botón desplegable de GitHub:**
+
+| Operación | Botón en GitHub UI |
+|---|---|
+| `feature/*` / `fix/*` → `develop` | **"Squash and merge"** |
+| `develop` → `main` | **"Create a merge commit"** |
+| `main` → `develop` (backsync) | **"Create a merge commit"** |
+
 **Backsync main → develop (después de cada release estable):**
 1. Crear rama `chore/sync-vX.Y.Z` desde `main`
 2. Abrir PR a `develop` con título `chore(develop): sync main vX.Y.Z into develop`
-3. Mergear con **merge commit** (no squash) — en la UI de GitHub: botón "Create a merge commit"
+3. Mergear con **"Create a merge commit"** (no squash)
 4. Release-please en develop detectará automáticamente el nuevo baseline desde el tag de main
 
 ---
