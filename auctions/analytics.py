@@ -5,16 +5,20 @@ Implementa métodos de data science para análisis de subastas
 
 from datetime import timedelta
 
-import numpy as np
-import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
+try:
+    import numpy as np
+    import pandas as pd
+    import plotly.express as px
+    import plotly.graph_objects as go
+    from plotly.offline import plot
+    from sklearn.linear_model import LinearRegression
+    from sklearn.preprocessing import StandardScaler
+except ImportError:
+    np = pd = px = go = plot = LinearRegression = StandardScaler = None  # type: ignore[assignment]
+
 from django.contrib.auth.models import User
 from django.db.models import Avg, Count, F, Q, Sum
 from django.utils import timezone
-from plotly.offline import plot
-from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import StandardScaler
 
 from .models import Bid, Comment, Listing, Watchlist
 
