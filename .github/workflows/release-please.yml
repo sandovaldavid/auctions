@@ -2,7 +2,7 @@ name: Release Please
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
 
 permissions:
   contents: write
@@ -20,7 +20,8 @@ jobs:
         id: release
         with:
           release-type: python
-          config-file: release-please-config.json
+          target-branch: ${{ github.ref_name }}
+          config-file: ${{ github.ref_name == 'develop' && 'release-please-config-prerelease.json' || 'release-please-config.json' }}
           manifest-file: .release-please-manifest.json
 
   post-release:

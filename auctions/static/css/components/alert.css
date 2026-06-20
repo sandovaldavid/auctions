@@ -94,7 +94,7 @@
 }
 
 .alert-success .alert-icon {
-    color: var(--success);
+    color: var(--success-text);
 }
 
 /* Alert types - Danger */
@@ -109,7 +109,7 @@
 }
 
 .alert-danger .alert-icon {
-    color: var(--error);
+    color: var(--error-text);
 }
 
 /* Alert types - Warning */
@@ -124,7 +124,7 @@
 }
 
 .alert-warning .alert-icon {
-    color: var(--warning);
+    color: var(--status-pending-text);
 }
 
 /* Alert types - Info */

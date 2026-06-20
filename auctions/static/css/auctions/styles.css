@@ -26,7 +26,7 @@ body {
 }
 
 .auction-timer {
-	color: var(--status-pending); /* Mapped from --timer-color */
+	color: var(--status-pending-text); /* Mapped from --timer-color */
 	font-weight: var(--font-bold);
 	display: flex;
 	align-items: center;
