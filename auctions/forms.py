@@ -94,3 +94,9 @@ class CommentForm(forms.ModelForm):
         labels = {
             "text": "Add a comment:",
         }
+
+    def clean_text(self):
+        text = self.cleaned_data.get("text", "").strip()
+        if not text:
+            raise forms.ValidationError("Comment cannot be empty.")
+        return text

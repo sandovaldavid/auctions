@@ -140,6 +140,7 @@ def bid(request, listing_id):
     return HttpResponseRedirect(reverse("listing", args=[listing_id]))
 
 
+@login_required
 def watchlist(request, listing_id):
     user = request.user
     if request.method == "POST":
@@ -162,6 +163,7 @@ def watchlist(request, listing_id):
     return render(request, "auctions/watchList.html", {"listings": page_listings})
 
 
+@login_required
 def watchlist_remove(request, listing_id):
     user = request.user
     current_listing = Listing.objects.get(pk=listing_id)
@@ -171,6 +173,7 @@ def watchlist_remove(request, listing_id):
     return HttpResponseRedirect(reverse("watchlist", args=[user.id]))
 
 
+@login_required
 def close_auction(request, listing_id):
     auction_listing = get_object_or_404(Listing, id=listing_id)
 
@@ -204,10 +207,13 @@ def categories(request):
         "auctions/categories.html",
         {
             "listings": listings,
-            "category_choices": Listing.objects.filter(active=True)
-            .values_list("category", flat=True)
-            .distinct()
-            .order_by("category"),
+            "category_choices": [
+                (cat, cat)
+                for cat in Listing.objects.filter(active=True)
+                .values_list("category", flat=True)
+                .distinct()
+                .order_by("category")
+            ],
             "selected_category": category,
         },
     )

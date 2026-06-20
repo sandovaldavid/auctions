@@ -80,5 +80,5 @@ def another_user(db):
 
 
 @pytest.fixture
-def listing(db):
-    return ListingFactory()
+def listing(db, user):
+    return ListingFactory(user=user)

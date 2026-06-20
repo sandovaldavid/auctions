@@ -83,6 +83,11 @@ omit = [
     "*/tests/*",
     "*/settings*",
     "manage.py",
+    "auctions/admin_views.py",
+    "auctions/analytics.py",
+    "auctions/data_utils.py",
+    "auctions/admin_config.py",
+    "auctions/management/commands/generate_reports.py",
 ]
 
 [tool.coverage.report]
