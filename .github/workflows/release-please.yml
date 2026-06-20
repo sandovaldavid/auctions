@@ -20,11 +20,9 @@ jobs:
         id: release
         with:
           release-type: python
-          config-file: release-please-config.json
-          manifest-file: .release-please-manifest.json
           target-branch: ${{ github.ref_name }}
-          prerelease: ${{ github.ref_name == 'develop' }}
-          prerelease-type: ${{ github.ref_name == 'develop' && 'beta' || '' }}
+          config-file: ${{ github.ref_name == 'develop' && 'release-please-config-prerelease.json' || 'release-please-config.json' }}
+          manifest-file: ${{ github.ref_name == 'develop' && '.release-please-manifest-develop.json' || '.release-please-manifest.json' }}
 
   post-release:
     name: Post-release tasks
