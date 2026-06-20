@@ -16,6 +16,8 @@ SECRET_KEY = os.getenv("SECRET_KEY", "a-default-secret-key-for-testing-only")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+if os.getenv("DYNO"):  # Running on Heroku
+    ALLOWED_HOSTS += [".herokuapp.com"]
 
 INSTALLED_APPS = [
     "auctions",

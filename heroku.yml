@@ -1,5 +1,8 @@
 build:
   docker:
     web: Dockerfile
+release:
+  image: web
+  command: python manage.py migrate --no-input
 run:
   web: gunicorn commerce.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 120
