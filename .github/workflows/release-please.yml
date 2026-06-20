@@ -23,6 +23,7 @@ jobs:
           target-branch: ${{ github.ref_name }}
           config-file: ${{ github.ref_name == 'develop' && 'release-please-config-prerelease.json' || 'release-please-config.json' }}
           manifest-file: .release-please-manifest.json
+          release-as: ${{ github.ref_name == 'develop' && '0.1.1-beta.0' || '' }}
 
   post-release:
     name: Post-release tasks
