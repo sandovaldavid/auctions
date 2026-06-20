@@ -57,7 +57,7 @@
 }
 
 .auction-card .bids-count {
-    color: var(--bid-current);
+    color: var(--bid-current-text);
     font-size: var(--text-sm);
     font-weight: var(--font-semibold);
 }
@@ -80,7 +80,7 @@
 
 .price-tag {
     font-weight: var(--font-bold);
-    color: var(--success);
+    color: var(--success-text);
     display: flex;
     align-items: center;
     gap: var(--space-2);

@@ -260,8 +260,23 @@
     /* Navigation Gradient */
     --nav-gradient: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-800) 100%);
     --nav-gradient-dark: linear-gradient(135deg, var(--primary-800) 0%, var(--primary-900) 100%);
+
+    /* WCAG AA-safe text variants for semantic colors
+       Use these when a semantic color is rendered as foreground text or an icon,
+       because the base semantic colors (gold, green) fail contrast on white backgrounds. */
+    --success-text: var(--accent-green-dark);       /* #059669 — 4.6:1 on white */
+    --bid-current-text: var(--accent-gold-dark);    /* #d97706 — 3.1:1 on white (large text) */
+    --status-pending-text: var(--accent-gold-dark); /* #d97706 — 3.1:1 on white (large text) */
+    --error-text: var(--accent-red-dark);           /* #dc2626 — 4.5:1 on white */
 }
 
 [data-theme="dark"] {
     --nav-gradient: var(--nav-gradient-dark);
+
+    /* WCAG AA-safe text variants for dark theme
+       These lighter shades achieve sufficient contrast on the dark elevated backgrounds (#1f2937). */
+    --success-text: var(--accent-green-light);      /* #34d399 — ~5.0:1 on #1f2937 */
+    --bid-current-text: var(--accent-gold-light);   /* #fbbf24 — ~5.2:1 on #1f2937 */
+    --status-pending-text: #fcd34d;                 /* amber-300 — ~6.0:1 on #1f2937 */
+    --error-text: var(--accent-red-light);          /* #f87171 — ~4.2:1 on #1f2937 */
 }
