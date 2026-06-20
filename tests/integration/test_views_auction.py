@@ -4,7 +4,7 @@ import pytest
 from django.urls import reverse
 
 from auctions.models import Bid, Listing
-from tests.conftest import BidFactory, ListingFactory, UserFactory
+from tests.conftest import BidFactory, ListingFactory
 
 
 @pytest.mark.django_db
@@ -20,9 +20,7 @@ class TestAuctionViews:
         assert response.status_code in (200, 404)
 
     def test_bid_requires_login(self, client, listing):
-        response = client.post(
-            reverse("bid", args=[listing.id]), {"amount": "20.00"}
-        )
+        response = client.post(reverse("bid", args=[listing.id]), {"amount": "20.00"})
         assert response.status_code == 302
         assert "/login" in response.url
 

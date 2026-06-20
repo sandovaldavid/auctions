@@ -1,7 +1,10 @@
 from decimal import Decimal
-from django.test import TestCase, Client
+
+from django.test import Client, TestCase
 from django.urls import reverse
-from auctions.models import User, Listing
+
+from auctions.models import Listing
+
 from .factories import UserFactory
 
 

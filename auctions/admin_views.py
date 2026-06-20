@@ -3,18 +3,16 @@ Vistas del panel de administración para superusuarios
 Dashboard de Business Intelligence para gestión de subastas
 """
 
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import user_passes_test
-from django.http import JsonResponse
-from django.utils import timezone
-from django.db.models import Q, Count, Sum, Avg
-from django.core.paginator import Paginator
 from django.contrib import messages
-from .models import Listing, Bid, Comment, User, Watchlist
+from django.contrib.auth.decorators import user_passes_test
+from django.core.paginator import Paginator
+from django.db.models import Count, Q
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
+
 from .analytics import AuctionAnalytics
-from .error_views import test_404_view, test_500_view, test_403_view
-import json
+from .models import Bid, Listing, User
 
 
 def is_superuser(user):
@@ -330,6 +328,7 @@ def admin_export_data(request):
     Exportar datos del sistema
     """
     import csv
+
     from django.http import HttpResponse
 
     export_type = request.GET.get("type", "listings")

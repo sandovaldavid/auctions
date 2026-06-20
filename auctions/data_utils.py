@@ -3,12 +3,13 @@ Utilidades para análisis de datos y Business Intelligence
 Funciones auxiliares para el dashboard de administración
 """
 
-import pandas as pd
+from datetime import timedelta
+
 import numpy as np
-from datetime import datetime, timedelta
+from django.db.models import Avg, Count, Q
 from django.utils import timezone
-from django.db.models import Q, Count, Sum, Avg, Max, Min
-from .models import Listing, Bid, Comment, User, Watchlist
+
+from .models import Bid, Listing, User
 
 
 class DataProcessor:

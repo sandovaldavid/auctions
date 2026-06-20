@@ -1,6 +1,7 @@
+from decimal import Decimal
+
 import factory
 import pytest
-from decimal import Decimal
 from django.contrib.auth import get_user_model
 
 from auctions.models import Bid, Comment, Listing, Watchlist

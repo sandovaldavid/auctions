@@ -1,6 +1,7 @@
 import factory
 from factory.django import DjangoModelFactory
-from auctions.models import User, Listing, Bid, Comment, Watchlist
+
+from auctions.models import Bid, Comment, Listing, User, Watchlist
 
 
 class UserFactory(DjangoModelFactory):

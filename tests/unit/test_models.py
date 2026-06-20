@@ -3,7 +3,7 @@ from decimal import Decimal
 import pytest
 from django.core.exceptions import ValidationError
 
-from auctions.models import Bid, Comment, Listing, Watchlist
+from auctions.models import Bid
 from tests.conftest import (
     BidFactory,
     CommentFactory,

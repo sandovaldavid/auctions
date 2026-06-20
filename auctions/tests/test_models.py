@@ -1,12 +1,13 @@
 from decimal import Decimal
+
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from auctions.models import Listing, Bid, Comment, Watchlist
+
 from .factories import (
-    UserFactory,
-    ListingFactory,
     BidFactory,
     CommentFactory,
+    ListingFactory,
+    UserFactory,
     WatchlistFactory,
 )
 

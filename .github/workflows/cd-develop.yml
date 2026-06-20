@@ -1,8 +1,14 @@
 name: CD - Develop (Staging)
 
+# Disabled until Oracle VM is configured with k3s + Argo CD.
+# Re-enable by adding: push: { branches: [develop] }
 on:
-  push:
-    branches: [develop]
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual trigger'
+        required: false
+        default: 'Manual deploy to staging'
 
 concurrency:
   group: cd-develop

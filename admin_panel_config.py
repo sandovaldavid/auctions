@@ -4,7 +4,6 @@ Variables de entorno y configuraciones personalizables
 """
 
 import os
-from django.conf import settings
 
 # Configuración del Panel de Administración
 ADMIN_PANEL_CONFIG = {

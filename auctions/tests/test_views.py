@@ -1,7 +1,11 @@
-from django.test import TestCase, Client
+from decimal import Decimal
+
+from django.test import Client, TestCase
 from django.urls import reverse
-from auctions.models import User, Listing
-from .factories import UserFactory, ListingFactory
+
+from auctions.models import Listing, User
+
+from .factories import ListingFactory, UserFactory
 
 
 class IndexViewTest(TestCase):
@@ -117,9 +121,6 @@ class NewAuctionViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse("index"))
         self.assertTrue(Listing.objects.filter(title="New Test Listing").exists())
-
-
-from decimal import Decimal
 
 
 class BidViewTest(TestCase):

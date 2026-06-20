@@ -1,10 +1,7 @@
-from decimal import Decimal
-
 import pytest
 
 from auctions.forms import BidForm, CommentForm, ListingForm
 from tests.conftest import ListingFactory
-
 
 VALID_LISTING_DATA = {
     "title": "Unique Listing Title",
@@ -77,7 +74,11 @@ class TestListingForm:
 
     def test_all_category_choices_accepted(self):
         for category, _ in ListingForm.CATEGORY_CHOICES:
-            data = {**VALID_LISTING_DATA, "title": f"Listing {category}", "category": category}
+            data = {
+                **VALID_LISTING_DATA,
+                "title": f"Listing {category}",
+                "category": category,
+            }
             form = ListingForm(data=data)
             assert form.is_valid(), f"Category '{category}' failed: {form.errors}"
 

@@ -1,8 +1,6 @@
 import pytest
 from django.urls import reverse
 
-from tests.conftest import UserFactory
-
 
 @pytest.mark.django_db
 class TestAuthViews:
@@ -43,7 +41,7 @@ class TestAuthViews:
     def test_register_success(self, client, db):
         from django.contrib.auth import get_user_model
 
-        User = get_user_model()
+        user_model = get_user_model()
         response = client.post(
             reverse("register"),
             {
@@ -54,7 +52,7 @@ class TestAuthViews:
             },
         )
         assert response.status_code == 302
-        assert User.objects.filter(username="brandnewuser").exists()
+        assert user_model.objects.filter(username="brandnewuser").exists()
 
     def test_register_password_mismatch(self, client, db):
         response = client.post(

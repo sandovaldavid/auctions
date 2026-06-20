@@ -3,12 +3,13 @@ Vistas personalizadas para manejo de errores
 Incluye funcionalidad de debug en desarrollo y páginas personalizadas en producción
 """
 
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.conf import settings
-from django.views.decorators.http import require_http_methods
-import traceback
 import sys
+import traceback
+
+from django.conf import settings
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.views.decorators.http import require_http_methods
 
 
 def custom_404_view(request, exception=None):
@@ -35,7 +36,7 @@ Using the URLconf defined in {settings.ROOT_URLCONF}, Django tried these URL pat
 
 The current path, {request.path}, matched the last one.
 
-You're seeing this error because you have DEBUG = True in your Django settings file. 
+You're seeing this error because you have DEBUG = True in your Django settings file.
 Change that to False, and Django will display a standard 404 page.
         """
         context["debug_info"] = debug_info.strip()

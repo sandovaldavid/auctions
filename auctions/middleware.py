@@ -3,13 +3,9 @@ Middleware personalizado para manejo de errores
 Intercepta errores 404 y usa nuestros handlers personalizados
 """
 
-from django.http import HttpResponseNotFound
 from django.conf import settings
-from django.urls import resolve, Resolver404
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render
-import traceback
-import sys
+from django.urls import Resolver404
 
 
 class CustomErrorHandlerMiddleware:

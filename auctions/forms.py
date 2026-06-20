@@ -3,7 +3,7 @@ import re
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Listing, Bid, Comment
+from .models import Bid, Comment, Listing
 
 
 class ListingForm(forms.ModelForm):

@@ -3,19 +3,20 @@ Módulo de análisis de datos para el dashboard de Business Intelligence
 Implementa métodos de data science para análisis de subastas
 """
 
-import pandas as pd
+from datetime import timedelta
+
 import numpy as np
-from datetime import datetime, timedelta
-from django.db.models import Count, Sum, Avg, Q, F
-from django.utils import timezone
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 from django.contrib.auth.models import User
-from .models import Listing, Bid, Comment, Watchlist
+from django.db.models import Avg, Count, F, Q, Sum
+from django.utils import timezone
+from plotly.offline import plot
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
-import plotly.graph_objects as go
-import plotly.express as px
-from plotly.offline import plot
-import json
+
+from .models import Bid, Comment, Listing, Watchlist
 
 
 class AuctionAnalytics:
@@ -214,12 +215,12 @@ class AuctionAnalytics:
 
             # Preparar datos para el modelo
             df = pd.DataFrame(historical_data)
-            X = df[["starting_bid", "bid_count", "days_active"]]
+            X = df[["starting_bid", "bid_count", "days_active"]]  # noqa: N806
             y = df["price_increase"]
 
             # Entrenar modelo
             scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X)
+            X_scaled = scaler.fit_transform(X)  # noqa: N806
 
             model = LinearRegression()
             model.fit(X_scaled, y)
@@ -315,7 +316,7 @@ class AuctionAnalytics:
                     y=[item["count"] for item in time_data["listings"]],
                     mode="lines+markers",
                     name="Listings",
-                    line=dict(color="#007bff"),
+                    line={"color": "#007bff"},
                 )
             )
             fig_trends.add_trace(
@@ -324,7 +325,7 @@ class AuctionAnalytics:
                     y=[item["count"] for item in time_data["bids"]],
                     mode="lines+markers",
                     name="Bids",
-                    line=dict(color="#28a745"),
+                    line={"color": "#28a745"},
                 )
             )
             fig_trends.update_layout(

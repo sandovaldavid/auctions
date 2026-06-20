@@ -2,11 +2,13 @@
 Comando de Django para generar reportes automáticos
 """
 
-from django.core.management.base import BaseCommand
-from django.utils import timezone
-from auctions.data_utils import ReportGenerator, AlertSystem
 import json
 import os
+
+from django.core.management.base import BaseCommand
+from django.utils import timezone
+
+from auctions.data_utils import AlertSystem, ReportGenerator
 
 
 class Command(BaseCommand):

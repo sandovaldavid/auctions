@@ -5,11 +5,11 @@ from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from .forms import ListingForm, BidForm, CommentForm
-from .models import User, Listing, Watchlist
+from .forms import BidForm, CommentForm, ListingForm
+from .models import Listing, User, Watchlist
 
 
 def index(request):

@@ -1,11 +1,12 @@
 from django.test import TestCase
-from auctions.forms import ListingForm, BidForm, CommentForm
+
+from auctions.forms import BidForm, CommentForm, ListingForm
+
 from .factories import UserFactory
 
 
 class ListingFormTest(TestCase):
     def test_valid_form(self):
-        user = UserFactory()
         form_data = {
             "title": "Test Listing",
             "description": "This is a test description.",
