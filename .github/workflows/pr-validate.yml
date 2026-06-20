@@ -64,13 +64,13 @@ jobs:
 
       - name: Copy report to PR directory
         run: |
-          mkdir -p reports/pr-${{ github.event.pull_request.number }}
-          cp -r downloaded-report/* reports/pr-${{ github.event.pull_request.number }}/
+          mkdir -p reports/pr/${{ github.event.pull_request.number }}
+          cp -r downloaded-report/* reports/pr/${{ github.event.pull_request.number }}/
 
       - name: Commit report to gh-pages
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add reports/pr-${{ github.event.pull_request.number }}/
+          git add reports/pr/${{ github.event.pull_request.number }}/
           git diff --staged --quiet || git commit -m "ci: add test report for PR #${{ github.event.pull_request.number }}"
           git push
