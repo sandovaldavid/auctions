@@ -68,12 +68,19 @@ addopts = [
     "--cov-fail-under=70",
     "--html=reports/test-report.html",
     "--self-contained-html",
+    "--ignore=tests/e2e",
     "-v",
 ]
 testpaths = ["tests"]
 filterwarnings = [
     "ignore::DeprecationWarning",
     "ignore::PendingDeprecationWarning",
+]
+markers = [
+    "a11y: accessibility tests using axe-core (WCAG 2.1 AA)",
+    "contrast: color contrast ratio tests for light and dark modes",
+    "responsive: layout and viewport tests (mobile/tablet/desktop)",
+    "e2e: end-to-end browser tests (require running dev server)",
 ]
 
 [tool.coverage.run]
