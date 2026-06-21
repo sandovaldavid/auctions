@@ -1,5 +1,6 @@
 {% extends "auctions/layout.html" %}
 {% load static %}
+{% load auctions_filters %}
 
 {% block title %}{{ listing.title }}{% endblock %}
 
@@ -189,7 +190,7 @@
                 <h4 class="card-title">
                     <i class="fas fa-align-left me-2 text-primary"></i>Description
                 </h4>
-                <p class="card-text">{{ listing.description }}</p>
+                <div class="card-text markdown-content">{{ listing.description|render_markdown }}</div>
             </div>
         </div>
 

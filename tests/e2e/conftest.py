@@ -57,9 +57,17 @@ def base_url() -> str:
 
 
 def apply_theme(page: Page, theme: str) -> None:
-    """Inject data-theme attribute and let CSS transitions settle."""
+    """Inject data-theme attribute; suppress transitions to read final values."""
+    # Freeze all CSS transitions/animations so computed styles reflect the
+    # fully-applied theme rather than an in-flight animation frame.
+    page.evaluate("""
+        const s = document.createElement('style');
+        s.id = '__no-transition__';
+        s.textContent = '*, *::before, *::after { transition: none !important; animation: none !important; }';
+        document.head.appendChild(s);
+    """)
     page.evaluate(f"document.body.setAttribute('data-theme', '{theme}')")
-    page.wait_for_timeout(150)
+    page.wait_for_timeout(50)
 
 
 def run_axe(page: Page) -> dict:

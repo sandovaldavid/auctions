@@ -553,21 +553,21 @@
 }
 
 [data-theme='dark'] .footer-brand h5 {
-	color: var(--primary-light);
+	color: var(--primary-500);
 }
 
 [data-theme='dark'] .social-links a {
-	background: rgba(255, 255, 255, 0.05);
-	color: var(--primary-light);
+	background: var(--primary-100);
+	color: var(--primary-700);
 }
 
 [data-theme='dark'] .social-links a:hover {
-	background: var(--primary-color);
-	color: var(--text-light);
+	background: var(--primary-500);
+	color: var(--white);
 }
 
 [data-theme='dark'] .footer-heading {
-	color: var(--primary-light);
+	color: var(--primary-500);
 }
 
 [data-theme='dark'] .footer-links a {

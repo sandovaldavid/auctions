@@ -279,4 +279,124 @@
     --bid-current-text: var(--accent-gold-light);   /* #fbbf24 — ~5.2:1 on #1f2937 */
     --status-pending-text: #fcd34d;                 /* amber-300 — ~6.0:1 on #1f2937 */
     --error-text: var(--accent-red-light);          /* #f87171 — ~4.2:1 on #1f2937 */
+
+    /* Bootstrap CSS variable overrides — remap Bootstrap's defaults to our dark values */
+    --bs-body-color: #f3f4f6;
+    --bs-body-color-rgb: 243, 244, 246;
+    --bs-body-bg: #111827;
+    --bs-body-bg-rgb: 17, 24, 39;
+    --bs-secondary-color: #9ca3af;
+    --bs-secondary-color-rgb: 156, 163, 175;
+    --bs-secondary-bg: #1f2937;
+    --bs-secondary-bg-rgb: 31, 41, 55;
+    --bs-tertiary-bg: #374151;
+    --bs-tertiary-bg-rgb: 55, 65, 81;
+    --bs-card-bg: #1f2937;
+    --bs-border-color: #374151;
+    --bs-border-color-translucent: rgba(55, 65, 81, 0.18);
+    --bs-link-color: #60a5fa;
+    --bs-link-color-rgb: 96, 165, 250;
+    --bs-link-hover-color: #93c5fd;
+    --bs-pagination-color: #60a5fa;
+    --bs-pagination-bg: #1f2937;
+    --bs-pagination-border-color: #374151;
+    --bs-pagination-disabled-color: #6b7280;
+    --bs-pagination-disabled-bg: #111827;
+    --bs-pagination-disabled-border-color: #374151;
+    --bs-form-control-bg: #1f2937;
+    --bs-form-control-disabled-bg: #374151;
+}
+
+/* ========================================
+   LEGACY VARIABLE ALIASES
+   Legacy components.css uses older variable names.
+   Defined on BOTH :root (light) and [data-theme="dark"] (body) so that
+   var() references inside descendants resolve from the correct context.
+   ======================================== */
+:root {
+    --card-bg: var(--bg-elevated);
+    --bg-main: var(--bg-primary);
+    --bg-hover: var(--bg-tertiary);
+    --bg-accent: var(--primary-100);
+    --text-light: var(--white);
+    --border-color: var(--border-medium);
+    --primary-color: var(--primary-500);
+    --primary-light: var(--primary-500);
+    --secondary-color: var(--secondary-500);
+    --bid-color: var(--bid-current-text);
+    --price-color: var(--success-text);
+    --gradient-primary: var(--nav-gradient);
+}
+
+[data-theme="dark"] {
+    --card-bg: var(--bg-elevated);
+    --bg-main: var(--bg-primary);
+    --bg-hover: var(--bg-tertiary);
+    --bg-accent: var(--primary-100);
+    --text-light: var(--white);
+    --border-color: var(--border-medium);
+    --primary-color: var(--primary-500);
+    --primary-light: var(--primary-500);
+    --secondary-color: var(--secondary-500);
+    --bid-color: var(--bid-current-text);
+    --price-color: var(--success-text);
+    --gradient-primary: var(--nav-gradient);
+}
+
+/* ========================================
+   BOOTSTRAP COMPONENT OVERRIDES
+   ======================================== */
+
+/* Fix .badge.bg-secondary contrast — Bootstrap's gray-500 background fails WCAG AA (3.29:1) */
+.badge.bg-secondary {
+    background-color: var(--primary-100) !important;
+    color: var(--primary-900) !important;
+}
+
+/* Fix headings in dark mode — Bootstrap inherits from --bs-body-color which doesn't switch */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+    color: var(--text-primary);
+}
+
+/* Fix .text-muted in dark mode — Bootstrap's secondary color stays gray on dark bg */
+[data-theme="dark"] .text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Fix form controls in dark mode */
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+    border-color: var(--border-medium);
+}
+
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+    border-color: var(--primary-400);
+}
+
+/* Fix card background in dark mode */
+[data-theme="dark"] .card {
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+    border-color: var(--border-light);
+}
+
+[data-theme="dark"] .card-body {
+    color: var(--text-primary);
+}
+
+/* Fix input-group-text in dark mode */
+[data-theme="dark"] .input-group-text {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-medium);
 }

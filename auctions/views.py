@@ -13,11 +13,41 @@ from .models import Listing, User, Watchlist
 
 
 def index(request):
-    list_user = Listing.objects.filter(active=True).order_by("-created")
-    paginator = Paginator(list_user, 10)
+    category = request.GET.get("category", "")
+    sort_by = request.GET.get("sortBy", "newest")
+
+    listings_qs = Listing.objects.filter(active=True)
+    if category:
+        listings_qs = listings_qs.filter(category=category)
+
+    if sort_by == "price_low":
+        listings_qs = listings_qs.order_by("starting_bid")
+    elif sort_by == "price_high":
+        listings_qs = listings_qs.order_by("-starting_bid")
+    else:
+        listings_qs = listings_qs.order_by("-created")
+
+    categories = (
+        Listing.objects.filter(active=True)
+        .values_list("category", flat=True)
+        .distinct()
+        .order_by("category")
+        .exclude(category="")
+    )
+
+    paginator = Paginator(listings_qs, 10)
     page_number = request.GET.get("page")
     page_listings = paginator.get_page(page_number)
-    return render(request, "auctions/index.html", {"listings": page_listings})
+    return render(
+        request,
+        "auctions/index.html",
+        {
+            "listings": page_listings,
+            "categories": categories,
+            "current_category": category,
+            "current_sort": sort_by,
+        },
+    )
 
 
 def login_view(request):

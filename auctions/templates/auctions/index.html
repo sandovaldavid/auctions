@@ -34,10 +34,10 @@
                         <label for="categoryFilter" class="form-label small mb-1">
                             <i class="fas fa-tag me-1"></i>Category
                         </label>
-                        <select id="categoryFilter" class="form-select">
-                            <option value="" selected>All Categories</option>
+                        <select id="categoryFilter" name="category" class="form-select">
+                            <option value="" {% if not current_category %}selected{% endif %}>All Categories</option>
                             {% for category in categories %}
-                                <option value="{{ category.id }}">{{ category.name }}</option>
+                                <option value="{{ category }}" {% if category == current_category %}selected{% endif %}>{{ category }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -45,11 +45,11 @@
                         <label for="sortBy" class="form-label small mb-1">
                             <i class="fas fa-sort me-1"></i>Sort By
                         </label>
-                        <select id="sortBy" class="form-select">
-                            <option value="newest" selected>Newest First</option>
-                            <option value="ending_soon">Ending Soon</option>
-                            <option value="price_low">Price: Low to High</option>
-                            <option value="price_high">Price: High to Low</option>
+                        <select id="sortBy" name="sortBy" class="form-select">
+                            <option value="newest" {% if current_sort == "newest" or not current_sort %}selected{% endif %}>Newest First</option>
+                            <option value="ending_soon" {% if current_sort == "ending_soon" %}selected{% endif %}>Ending Soon</option>
+                            <option value="price_low" {% if current_sort == "price_low" %}selected{% endif %}>Price: Low to High</option>
+                            <option value="price_high" {% if current_sort == "price_high" %}selected{% endif %}>Price: High to Low</option>
                         </select>
                     </div>
                     <div class="col-12 col-md-4 d-grid d-md-flex justify-content-md-end">

@@ -36,17 +36,12 @@
 			media="print"
 			onload="this.media='all'" />
 
-		<!-- Components CSS - Load asynchronously -->
-		<link
-			href="{% static 'css/components.css' %}"
-			rel="stylesheet"
-			media="print"
-			onload="this.media='all'" />
-		<link
-			href="{% static 'css/components/navigation.css' %}"
-			rel="stylesheet"
-			media="print"
-			onload="this.media='all'" />
+		<!-- Components CSS -->
+		<link href="{% static 'css/components.css' %}" rel="stylesheet" />
+		<link href="{% static 'css/components/navigation.css' %}" rel="stylesheet" />
+		<link href="{% static 'css/components/card.css' %}" rel="stylesheet" />
+		<link href="{% static 'css/components/pagination.css' %}" rel="stylesheet" />
+		<link href="{% static 'css/components/footer.css' %}" rel="stylesheet" />
 
 		<!-- Extra CSS block for additional styles -->
 		{% block extra_css %}{% endblock %}
@@ -54,9 +49,8 @@
 		<!-- Favicon -->
 		<link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon" />
 
-		<!-- Fallback for async CSS loading -->
+		<!-- Fallback for async font-awesome loading -->
 		<noscript>
-			<link href="{% static 'css/components.css' %}" rel="stylesheet" />
 			<link
 				href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
 				rel="stylesheet" />

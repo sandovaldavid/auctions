@@ -10,6 +10,17 @@
 	box-sizing: border-box;
 }
 
+/* Prevent horizontal overflow on all viewports */
+html {
+	overflow-x: hidden;
+	max-width: 100%;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
 body {
 	font-family: var(--font-primary);
 	line-height: var(--leading-normal);
@@ -21,6 +32,7 @@ body {
 	font-weight: var(--font-normal);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	overflow-x: hidden;
 }
 
 /* Skip Link for Accessibility */

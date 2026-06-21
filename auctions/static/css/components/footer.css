@@ -48,7 +48,7 @@
     height: 40px;
     border-radius: var(--radius-full);
     background: var(--primary-100);
-    color: var(--primary-500);
+    color: var(--primary-700);
     font-size: 1.2rem;
     transition: var(--transition-all);
 }

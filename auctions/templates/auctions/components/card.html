@@ -1,3 +1,4 @@
+{% load auctions_filters %}
 <div class="card auction-card h-100 border-0">
     {% if auction %}
         <!-- Special badges section - positioned absolutely -->
@@ -69,7 +70,7 @@
                         </div>
                         
                         <p class="description-text mb-3">
-                            {{ auction.description|truncatechars:100 }}
+                            {{ auction.description|strip_markdown|truncatechars:100 }}
                         </p>
                         
                         <!-- Bids count - adds useful information -->
