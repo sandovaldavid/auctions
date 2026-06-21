@@ -1019,7 +1019,6 @@
 }
 
 [data-theme='dark'] .navbar-collapse {
-	background: var(--bg-main);
 	border-color: var(--border-color);
 }
 
