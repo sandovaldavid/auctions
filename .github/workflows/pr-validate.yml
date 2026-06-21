@@ -24,6 +24,17 @@ jobs:
     name: security / scan
     runs-on: ubuntu-latest
     steps:
+      - name: Verify PR source branch is develop
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          if [ "$BRANCH" != "develop" ] && [[ "$BRANCH" != release-please--branches--* ]]; then
+            echo "[error] Pull Requests to main are only allowed from develop or release-please branches."
+            echo "[error] Current source branch: $BRANCH"
+            exit 1
+          fi
+          echo "[info] PR source branch verified: $BRANCH"
+
       - uses: actions/checkout@v4
 
       - name: Set up Python
