@@ -1,0 +1,25 @@
+services:
+  # Override web: add healthcheck (required by playwright depends_on)
+  # and allow "web" hostname in ALLOWED_HOSTS (playwright accesses http://web:8000).
+  web:
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:8000/ > /dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    environment:
+      DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1,0.0.0.0,web"
+
+  playwright:
+    build:
+      context: .
+      dockerfile: Dockerfile.playwright
+    depends_on:
+      web:
+        condition: service_healthy
+    environment:
+      BASE_URL: "http://web:8000"
+    volumes:
+      - ./tests:/app/tests
+      - ./reports:/app/reports

@@ -19,12 +19,12 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     command: >
       sh -c "python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - .:/app
+      - .:/app:z
     ports:
       - "8000:8000"
     environment:
@@ -35,6 +35,14 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    # Healthcheck used by docker-compose.e2e.yml's playwright service.
+    # Curl without -f: exits 0 as long as the server responds (even with 4xx).
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:8000/ > /dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
 volumes:
   postgres_data:

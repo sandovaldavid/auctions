@@ -169,3 +169,6 @@ cython_debug/
 
 /staticfiles
 
+
+# E2E test fixtures (downloaded at runtime)
+tests/e2e/fixtures/axe.min.js
