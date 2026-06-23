@@ -1,0 +1,68 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Docker: Up (Start Services)",
+      "type": "shell",
+      "command": "make up",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Docker: Down (Stop Services)",
+      "type": "shell",
+      "command": "make down",
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Django: Migrate (Docker)",
+      "type": "shell",
+      "command": "make migrate",
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Django: Seed Data (Docker)",
+      "type": "shell",
+      "command": "make seed",
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Django: Shell (Docker)",
+      "type": "shell",
+      "command": "make shell",
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Pytest: Run Unit & Integration Tests (Docker)",
+      "type": "shell",
+      "command": "make test",
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Pytest: Run E2E Playwright Tests (Docker)",
+      "type": "shell",
+      "command": "make test-e2e",
+      "presentation": {
+        "reveal": "always"
+      }
+    }
+  ]
+}
