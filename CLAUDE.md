@@ -8,7 +8,7 @@ Guía de referencia para Claude Code y colaboradores. Define la arquitectura obj
 
 | Capa | Tecnología |
 |------|-----------|
-| Backend | Django 5.1+ / Python 3.10 |
+| Backend | Django 5.1+ / Python 3.10 (target de tooling; imagen runtime `python:3.12-slim`) |
 | Base de datos dev | SQLite (local) |
 | Base de datos prod | PostgreSQL 16 |
 | Frontend | Django Templates + Bootstrap 5.3 |
@@ -25,10 +25,15 @@ Guía de referencia para Claude Code y colaboradores. Define la arquitectura obj
 ```
 Django Monolith (actual)
   └── auctions/          ← única app Django
-       ├── models.py     ← User, Listing, Bid, Comment, Watchlist
-       ├── views.py      ← 11 vistas SSR
-       ├── forms.py      ← ListingForm, BidForm, CommentForm
-       └── templates/    ← Bootstrap 5.3
+       ├── models.py       ← User, Listing, Bid, Comment, Watchlist
+       ├── views.py        ← 12 vistas SSR públicas
+       ├── forms.py        ← ListingForm, BidForm, CommentForm
+       ├── admin_views.py  ← panel admin/BI (superuser) — 13 vistas
+       ├── analytics.py    ← reportes y series (usa pandas/plotly)
+       ├── data_utils.py   ← generación de reportes
+       ├── middleware.py   ← Custom404Middleware, error handlers
+       ├── error_views.py  ← páginas de error 400/403/404/500
+       └── templates/      ← Bootstrap 5.3
 
 Evolución planificada (en fases):
   Fase 2 → djangorestframework: API endpoints para Listing/Bid/Watchlist
@@ -45,7 +50,7 @@ Evolución planificada (en fases):
 | Entorno | Plataforma | Trigger |
 |---------|-----------|---------|
 | Local | `docker compose up` | Manual |
-| Staging | Oracle VM (k3s + Argo CD) | Push a `develop` |
+| Staging | Oracle VM (k3s + Argo CD) | Pendiente — `cd-develop` está deshabilitado (`workflow_dispatch`) hasta que el stack Oracle VM esté listo |
 | Producción | Heroku (Docker stack) | Push a `main` via GitHub Actions |
 | Producción futura | Oracle VM | Cuando se agoten créditos Heroku |
 
@@ -126,7 +131,7 @@ ci(ci): add path filter to devcontainer workflow
 | `docker` | Dockerfile, docker-compose.yml, docker-compose.prod.yml, nginx/ |
 | `deps` | requirements.txt, requirements-dev.txt, pyproject.toml |
 | `devcontainer` | .devcontainer/ |
-| `docs` | docs/, README.md, CLAUDE.md |
+| `docs` | docs/ (incl. docs/audits/, docs/tasks/), README.md, CLAUDE.md, AGENTS.md |
 | `infra` | Oracle VM, k3s, Argo CD, Heroku, scripts de infraestructura |
 | `gh-pages` | Rama gh-pages, reportes de tests, index.html |
 | `release` | release-please-config.json, .release-please-manifest.json, CHANGELOG |
@@ -175,18 +180,21 @@ Los hooks en `.pre-commit-config.yaml` corren automáticamente en cada commit: r
 ### Stack
 
 ```
-tests/
+tests/                   # suite canónica (testpaths = ["tests"])
 ├── conftest.py          # Factories (factory-boy) + fixtures pytest
 ├── unit/
-│   ├── test_models.py   # Listing.place_bid(), Watchlist, Bid, Comment
-│   └── test_forms.py    # Validación de ListingForm, BidForm, CommentForm
+│   ├── test_models.py       # Listing.place_bid(), Watchlist, Bid, Comment
+│   ├── test_forms.py        # Validación de ListingForm, BidForm, CommentForm
+│   └── test_theme_colors.py # Contraste WCAG 2.1 (estático) de variables.css
 ├── integration/
 │   ├── test_views_auth.py
 │   ├── test_views_auction.py
 │   ├── test_views_watchlist.py
 │   └── test_views_categories.py
-└── e2e/                 # Playwright — flujos completos en browser
+└── e2e/                 # Provisionado para Playwright + axe-core, aún SIN tests
 ```
+
+> `auctions/tests/` es una suite legacy fuera de `testpaths` (no se ejecuta) — ver [docs/audits/testing-and-ci.md](docs/audits/testing-and-ci.md) (TEST-003).
 
 ### Correr tests
 
@@ -208,6 +216,14 @@ pytest --cov=auctions --cov-report=term-missing --no-header -q
 - Cobertura mínima: **70%** (`--cov-fail-under=70` en pyproject.toml)
 - Todo código nuevo en `auctions/` debe tener test correspondiente
 - Usar factories (`UserFactory`, `ListingFactory`, etc.) — no crear objetos directamente
+
+---
+
+## Backlog y auditoría
+
+- **Hallazgos:** [docs/audits/](docs/audits/README.md) — auditoría completa (seguridad, rendimiento, accesibilidad, UI/UX, tests).
+- **Tareas priorizadas:** [docs/tasks/](docs/tasks/README.md) — tablero por prioridad, una ficha por rama con checklist e instrucciones.
+- **Guía operativa para agentes:** [AGENTS.md](AGENTS.md).
 
 ---
 
@@ -253,7 +269,7 @@ cp .env.example .env
 | Workflow | Trigger | Hace qué |
 |---------|---------|---------|
 | `pr-validate` | PR → develop o main | Lint + tests + security scan + publica reporte en gh-pages |
-| `cd-develop` | Push a develop | Tests + build Docker + push GHCR + actualiza reporte develop |
+| `cd-develop` | Manual (`workflow_dispatch`) — deshabilitado hasta Oracle VM | Tests + build Docker + push GHCR + actualiza reporte develop |
 | `cd-production` | Push a main | Tests + build Docker + deploy Heroku + actualiza reporte main |
 | `release-please` | Push a main | Crea PR de release con CHANGELOG automático |
 | `devcontainer` | Push (paths: `.devcontainer/**`) | Build + push imagen a GHCR |
