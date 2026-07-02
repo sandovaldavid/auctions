@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3-beta.0](https://github.com/sandovaldavid/auctions/compare/v0.2.2-beta.0...v0.2.3-beta.0) (2026-07-02)
+
+
+### Documentation
+
+* **docs:** add full project audit and rewrite docker guide ([#57](https://github.com/sandovaldavid/auctions/issues/57)) ([896fb27](https://github.com/sandovaldavid/auctions/commit/896fb2730a45d51d2f9e136e06096040702ab541))
+
 ## [0.2.2-beta.0](https://github.com/sandovaldavid/auctions/compare/v0.2.1-beta.0...v0.2.2-beta.0) (2026-06-20)
 
 
