@@ -271,11 +271,25 @@ Actualmente, la aplicación no expone APIs públicas, pero utiliza el enrutamien
 
 ## 🧪 Pruebas
 
-Ejecuta la suite de pruebas para asegurarte de que todo funciona correctamente:
+Ejecuta la suite de pruebas (pytest) para asegurarte de que todo funciona correctamente:
 
 ```bash
-python manage.py test
+# Toda la suite con cobertura
+pytest
+
+# Solo unit + integration (sin E2E)
+pytest tests/unit/ tests/integration/
 ```
+
+---
+
+## 📚 Documentación
+
+- [docs/](docs/README.md) — Índice de la documentación del proyecto
+- [docs/Docker.md](docs/Docker.md) — Stack de contenedores (dev, producción, Heroku, GHCR)
+- [docs/oracle-vm-stack.md](docs/oracle-vm-stack.md) — Auto-hospedaje en Oracle Cloud VM
+- [docs/audits/](docs/audits/README.md) — Auditoría completa: seguridad, rendimiento, accesibilidad, UI/UX
+- [CLAUDE.md](CLAUDE.md) — Convenciones: ramas, commits, calidad de código, tests
 
 ---
 
