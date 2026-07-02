@@ -180,10 +180,13 @@ kubectl -n argocd get secret argocd-initial-admin-secret \
 
 **Conectar Argo CD con GitHub:**
 En la UI de Argo CD → Settings → Repositories → Connect Repo
-- URL: `https://github.com/sandovaldavid/auctions`
+- URL: `https://github.com/sandovaldavid/project-02-auctions`
 - Tipo: HTTPS con GitHub App Token o Personal Access Token
 
 **Crear Application para staging:**
+
+> Nota: el directorio `k8s/` (manifiestos Deployment/Service/IngressRoute) es estructura **planificada**; aún no existe en el repositorio. Crearlo es parte de habilitar el CD de staging (ver `cd-develop.yml`, hoy deshabilitado).
+
 ```yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -193,7 +196,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/sandovaldavid/auctions
+    repoURL: https://github.com/sandovaldavid/project-02-auctions
     targetRevision: develop
     path: k8s/staging
   destination:
@@ -238,7 +241,6 @@ docker run -d \
 # docker-compose.glitchtip.yml
 mkdir -p ~/glitchtip && cd ~/glitchtip
 cat > docker-compose.yml <<'EOF'
-version: "3"
 x-environment: &default-environment
   DATABASE_URL: postgres://glitchtip:glitchtip@postgres:5432/glitchtip
   SECRET_KEY: cambia-esto-por-algo-seguro
@@ -298,7 +300,6 @@ sentry_sdk.init(
 ```bash
 mkdir -p ~/monitoring && cd ~/monitoring
 cat > docker-compose.yml <<'EOF'
-version: "3"
 services:
   prometheus:
     image: prom/prometheus:latest
