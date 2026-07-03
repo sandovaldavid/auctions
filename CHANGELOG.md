@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.4-beta.0](https://github.com/sandovaldavid/auctions/compare/v0.2.3-beta.0...v0.2.4-beta.0) (2026-07-03)
+
+
+### Bug Fixes
+
+* **auctions:** make analytics work on PostgreSQL ([#62](https://github.com/sandovaldavid/auctions/issues/62)) ([56ace39](https://github.com/sandovaldavid/auctions/commit/56ace39a4f9329ec1ffe526a84ff55f281b79f63))
+* **auctions:** resolve P1 critical security findings ([#61](https://github.com/sandovaldavid/auctions/issues/61)) ([0f1f746](https://github.com/sandovaldavid/auctions/commit/0f1f7463f9cdcdb73fb7aa254c95e22ce9b8497b))
+
+
+### Documentation
+
+* **docs:** add task backlog and AGENTS.md, refresh CLAUDE.md ([#59](https://github.com/sandovaldavid/auctions/issues/59)) ([a693007](https://github.com/sandovaldavid/auctions/commit/a693007733c3f9049fc5075b29d943d4c0118589))
+
 ## [0.2.3-beta.0](https://github.com/sandovaldavid/auctions/compare/v0.2.2-beta.0...v0.2.3-beta.0) (2026-07-02)
 
 
