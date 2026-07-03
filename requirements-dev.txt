@@ -22,9 +22,3 @@ safety>=3.0
 django-debug-toolbar>=4.4
 django-extensions>=3.2
 ipython>=8.0
-
-# Data / BI (future features)
-pandas>=2.2
-numpy>=1.26
-plotly>=5.17
-scikit-learn>=1.4

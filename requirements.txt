@@ -8,3 +8,9 @@ whitenoise>=6.8
 sqlparse>=0.5
 tzdata>=2024.2
 django-import-export>=4.1
+
+# Data / BI (admin analytics dashboard)
+pandas>=2.2
+numpy>=1.26
+plotly>=5.17
+scikit-learn>=1.4
