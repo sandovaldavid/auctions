@@ -67,6 +67,13 @@ class TestAuctionViews:
         listing.refresh_from_db()
         assert listing.active is True
 
+    def test_close_auction_get_not_allowed(self, client, user, listing):
+        client.force_login(user)
+        response = client.get(reverse("close_auction", args=[listing.id]))
+        assert response.status_code == 405
+        listing.refresh_from_db()
+        assert listing.active is True
+
     def test_close_auction_sets_winner(self, client, user, another_user):
         listing = ListingFactory(user=user)
         BidFactory(user=another_user, listing=listing, amount=Decimal("30.00"))

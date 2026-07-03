@@ -38,10 +38,18 @@ class TestWatchlistViews:
     def test_watchlist_remove(self, client, user, listing):
         WatchlistFactory(user=user, listing=listing, active=True)
         client.force_login(user)
-        response = client.get(reverse("watchlist_remove", args=[listing.id]))
+        response = client.post(reverse("watchlist_remove", args=[listing.id]))
         assert response.status_code == 302
         item = Watchlist.objects.get(user=user, listing=listing)
         assert item.active is False
+
+    def test_watchlist_remove_get_not_allowed(self, client, user, listing):
+        WatchlistFactory(user=user, listing=listing, active=True)
+        client.force_login(user)
+        response = client.get(reverse("watchlist_remove", args=[listing.id]))
+        assert response.status_code == 405
+        item = Watchlist.objects.get(user=user, listing=listing)
+        assert item.active is True
 
     def test_watchlist_page_shows_active_items(self, client, user, listing):
         WatchlistFactory(user=user, listing=listing, active=True)

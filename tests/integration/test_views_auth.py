@@ -30,9 +30,14 @@ class TestAuthViews:
 
     def test_logout_redirects(self, client, user):
         client.force_login(user)
-        response = client.get(reverse("logout"))
+        response = client.post(reverse("logout"))
         assert response.status_code == 302
         assert response.url == reverse("index")
+
+    def test_logout_get_not_allowed(self, client, user):
+        client.force_login(user)
+        response = client.get(reverse("logout"))
+        assert response.status_code == 405
 
     def test_register_get(self, client):
         response = client.get(reverse("register"))
@@ -79,6 +84,22 @@ class TestAuthViews:
         )
         assert response.status_code == 200
         assert b"already taken" in response.content
+
+    def test_register_weak_password_rejected(self, client, db):
+        from django.contrib.auth import get_user_model
+
+        user_model = get_user_model()
+        response = client.post(
+            reverse("register"),
+            {
+                "username": "weakpassuser",
+                "email": "weak@example.com",
+                "password": "password",
+                "confirmation": "password",
+            },
+        )
+        assert response.status_code == 200
+        assert not user_model.objects.filter(username="weakpassuser").exists()
 
     def test_new_auction_requires_login(self, client):
         response = client.get(reverse("new_auction"))
