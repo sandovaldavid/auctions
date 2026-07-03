@@ -1,6 +1,6 @@
 # Tarea: `fix/analytics-postgres` — Analítica funcional en PostgreSQL
 
-> **Prioridad:** 1 (Crítico) · **Rama base:** `develop` · **Merge:** Squash and merge · **Estado:** Pendiente
+> **Prioridad:** 1 (Crítico) · **Rama base:** `develop` · **Merge:** Squash and merge · **Estado:** En progreso
 > **Detalle de hallazgos:** [../audits/code-quality.md](../audits/code-quality.md)
 
 ## Objetivo
@@ -16,8 +16,8 @@ git checkout -b fix/analytics-postgres
 
 ## Hallazgos a resolver
 
-- [ ] **CODE-001** — `analytics.py` importa `django.contrib.auth.models.User` + `.extra()` solo-SQLite (`auctions/analytics.py:19,84,93,102,283,296`)
-- [ ] **CODE-002** — `numpy`/`pandas` ausentes de `requirements.txt` (`auctions/data_utils.py:8`, `management/commands/generate_reports.py:86`)
+- [x] **CODE-001** — `analytics.py` importa `django.contrib.auth.models.User` + `.extra()` solo-SQLite (`auctions/analytics.py:19,84,93,102,283,296`)
+- [x] **CODE-002** — `numpy`/`pandas` ausentes de `requirements.txt` (`auctions/data_utils.py:8`, `management/commands/generate_reports.py:86`)
 
 ## Instrucciones / recomendaciones
 
@@ -65,7 +65,7 @@ build(deps): move pandas and numpy to runtime requirements
 
 ## Criterios de done
 
-- [ ] Analítica funciona en PostgreSQL sin excepciones
-- [ ] Imports de `numpy`/`pandas` resueltos en la imagen de producción
-- [ ] Tests de analítica en la suite (fuera del `omit`); cobertura ≥ 70%
+- [x] Analítica funciona en PostgreSQL sin excepciones (verificado contra PostgreSQL 16 real)
+- [x] Imports de `numpy`/`pandas` resueltos en la imagen de producción (movidos a `requirements.txt`)
+- [x] Tests de analítica en la suite (fuera del `omit`); cobertura ≥ 70% (86.04%)
 - [ ] `pr-validate` en verde; PR a `develop`; fila actualizada en el [tablero](README.md)
