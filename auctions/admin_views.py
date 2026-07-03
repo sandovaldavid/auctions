@@ -3,6 +3,8 @@ Vistas del panel de administración para superusuarios
 Dashboard de Business Intelligence para gestión de subastas
 """
 
+import logging
+
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator
@@ -13,6 +15,8 @@ from django.utils import timezone
 
 from .analytics import AuctionAnalytics
 from .models import Bid, Listing, User
+
+logger = logging.getLogger(__name__)
 
 
 def is_superuser(user):
@@ -56,6 +60,7 @@ def admin_dashboard(request):
 
         return render(request, "auctions/admin/dashboard.html", context)
     except Exception as e:
+        logger.exception("Failed to build admin dashboard analytics")
         # En caso de error, mostrar una página simple de administración
         context = {
             "page_title": "Dashboard de Administración",

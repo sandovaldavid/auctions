@@ -5,22 +5,21 @@ Implementa métodos de data science para análisis de subastas
 
 from datetime import timedelta
 
-try:
-    import numpy as np
-    import pandas as pd
-    import plotly.express as px
-    import plotly.graph_objects as go
-    from plotly.offline import plot
-    from sklearn.linear_model import LinearRegression
-    from sklearn.preprocessing import StandardScaler
-except ImportError:
-    np = pd = px = go = plot = LinearRegression = StandardScaler = None  # type: ignore[assignment]
-
-from django.contrib.auth.models import User
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+from django.contrib.auth import get_user_model
 from django.db.models import Avg, Count, F, Q, Sum
+from django.db.models.functions import ExtractMonth, TruncDate, TruncMonth
 from django.utils import timezone
+from plotly.offline import plot
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import StandardScaler
 
 from .models import Bid, Comment, Listing, Watchlist
+
+User = get_user_model()
 
 
 class AuctionAnalytics:
@@ -81,7 +80,7 @@ class AuctionAnalytics:
         # Listings por día
         listings_by_day = (
             Listing.objects.filter(created__gte=start_date)
-            .extra(select={"day": "date(created)"})
+            .annotate(day=TruncDate("created"))
             .values("day")
             .annotate(count=Count("id"))
             .order_by("day")
@@ -90,7 +89,7 @@ class AuctionAnalytics:
         # Bids por día
         bids_by_day = (
             Bid.objects.filter(listing__created__gte=start_date)
-            .extra(select={"day": "date(listing__created)"})
+            .annotate(day=TruncDate("listing__created"))
             .values("day")
             .annotate(count=Count("id"), total_amount=Sum("amount"))
             .order_by("day")
@@ -99,16 +98,19 @@ class AuctionAnalytics:
         # Usuarios registrados por día
         users_by_day = (
             User.objects.filter(date_joined__gte=start_date)
-            .extra(select={"day": "date(date_joined)"})
+            .annotate(day=TruncDate("date_joined"))
             .values("day")
             .annotate(count=Count("id"))
             .order_by("day")
         )
 
+        def _serialize_by_day(rows):
+            return [{**row, "day": row["day"].isoformat()} for row in rows]
+
         return {
-            "listings": list(listings_by_day),
-            "bids": list(bids_by_day),
-            "users": list(users_by_day),
+            "listings": _serialize_by_day(listings_by_day),
+            "bids": _serialize_by_day(bids_by_day),
+            "users": _serialize_by_day(users_by_day),
         }
 
     def get_category_analysis(self):
@@ -280,7 +282,7 @@ class AuctionAnalytics:
         """
         # Análisis mensual
         monthly_data = (
-            Listing.objects.extra(select={"month": 'strftime("%Y-%m", created)'})
+            Listing.objects.annotate(month=TruncMonth("created"))
             .values("month")
             .annotate(
                 listings_count=Count("id"),
@@ -293,15 +295,19 @@ class AuctionAnalytics:
 
         # Análisis de estacionalidad
         seasonal_data = (
-            Listing.objects.extra(select={"month": 'strftime("%m", created)'})
+            Listing.objects.annotate(month=ExtractMonth("created"))
             .values("month")
             .annotate(count=Count("id"))
             .order_by("month")
         )
 
         return {
-            "monthly_trends": list(monthly_data),
-            "seasonal_patterns": list(seasonal_data),
+            "monthly_trends": [
+                {**row, "month": row["month"].strftime("%Y-%m")} for row in monthly_data
+            ],
+            "seasonal_patterns": [
+                {**row, "month": f"{row['month']:02d}"} for row in seasonal_data
+            ],
         }
 
     def generate_plotly_charts(self):

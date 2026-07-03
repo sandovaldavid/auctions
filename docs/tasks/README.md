@@ -33,8 +33,8 @@ Convenciones completas: [CLAUDE.md](../../CLAUDE.md) · Guía operativa para age
 
 | Rama | Área | Hallazgos | Esfuerzo | Estado | Ficha |
 |------|------|-----------|:--------:|--------|-------|
-| `fix/security-critical` | Seguridad | SEC-001,002,003,005,006,007,008,011 · CODE-004 | M | En progreso | [p1-fix-security-critical.md](p1-fix-security-critical.md) |
-| `fix/analytics-postgres` | Correctitud | CODE-001, CODE-002 | L | Pendiente | [p1-fix-analytics-postgres.md](p1-fix-analytics-postgres.md) |
+| `fix/security-critical` | Seguridad | SEC-001,002,003,005,006,007,008,011 · CODE-004 | M | Hecho | [p1-fix-security-critical.md](p1-fix-security-critical.md) |
+| `fix/analytics-postgres` | Correctitud | CODE-001, CODE-002 | L | En progreso | [p1-fix-analytics-postgres.md](p1-fix-analytics-postgres.md) |
 
 ## Prioridad 2 — Alto
 

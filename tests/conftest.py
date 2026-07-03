@@ -80,5 +80,10 @@ def another_user(db):
 
 
 @pytest.fixture
+def superuser(db):
+    return UserFactory(username="admin_user", is_staff=True, is_superuser=True)
+
+
+@pytest.fixture
 def listing(db, user):
     return ListingFactory(user=user)

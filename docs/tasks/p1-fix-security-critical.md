@@ -1,6 +1,6 @@
 # Tarea: `fix/security-critical` — Correcciones críticas de seguridad
 
-> **Prioridad:** 1 (Crítico) · **Rama base:** `develop` · **Merge:** Squash and merge · **Estado:** En progreso
+> **Prioridad:** 1 (Crítico) · **Rama base:** `develop` · **Merge:** Squash and merge · **Estado:** Hecho ([PR #61](https://github.com/sandovaldavid/auctions/pull/61))
 > **Detalle de hallazgos:** [../audits/security.md](../audits/security.md) · [../audits/code-quality.md](../audits/code-quality.md)
 
 ## Objetivo
@@ -86,5 +86,5 @@ fix(auctions): use get_object_or_404 and POST.get in views
 
 - [x] Todos los checkboxes de hallazgos marcados
 - [x] Tests nuevos verdes; cobertura ≥ 70% (82.22% local, verificado también contra PostgreSQL 16)
-- [ ] `pr-validate` en verde
-- [ ] PR a `develop` con "Squash and merge"; fila actualizada en el [tablero](README.md)
+- [x] `pr-validate` en verde
+- [x] PR a `develop` con "Squash and merge"; fila actualizada en el [tablero](README.md)
