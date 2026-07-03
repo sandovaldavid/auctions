@@ -20,11 +20,15 @@
         </div>
         
         {% if remove_url %}
-            <button onclick="if(confirm('Remove from watchlist?')) window.location.href='{{ remove_url }}'" 
-                    class="btn-close position-absolute top-0 end-0 m-3 bg-light rounded-circle p-2 z-1" 
-                    type="button"
-                    aria-label="Remove from watchlist">
-            </button>
+            <form method="post" action="{{ remove_url }}"
+                  class="position-absolute top-0 end-0 m-3 z-1"
+                  onsubmit="return confirm('Remove from watchlist?')">
+                {% csrf_token %}
+                <button class="btn-close bg-light rounded-circle p-2"
+                        type="submit"
+                        aria-label="Remove from watchlist">
+                </button>
+            </form>
         {% endif %}
         
         <div class="row g-0 h-100">

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import models, transaction
 from django.urls import reverse
 
 
@@ -38,11 +38,18 @@ class Listing(models.Model):
         return relative_url
 
     def place_bid(self, user, bid_value):
-        if self.current_bid is not None and bid_value <= self.current_bid:
-            raise ValidationError("The bid must be higher than the current bid.")
-        self.current_bid = bid_value
-        self.save()
-        Bid.objects.create(user=user, listing=self, amount=bid_value)
+        with transaction.atomic():
+            listing = Listing.objects.select_for_update().get(pk=self.pk)
+            if listing.current_bid is not None:
+                if bid_value <= listing.current_bid:
+                    raise ValidationError(
+                        "The bid must be higher than the current bid."
+                    )
+            elif bid_value < listing.starting_bid:
+                raise ValidationError("The bid must be at least the starting bid.")
+            listing.current_bid = bid_value
+            listing.save(update_fields=["current_bid"])
+            Bid.objects.create(user=user, listing=listing, amount=bid_value)
 
 
 class Bid(models.Model):

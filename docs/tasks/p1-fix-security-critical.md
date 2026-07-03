@@ -1,6 +1,6 @@
 # Tarea: `fix/security-critical` — Correcciones críticas de seguridad
 
-> **Prioridad:** 1 (Crítico) · **Rama base:** `develop` · **Merge:** Squash and merge · **Estado:** Pendiente
+> **Prioridad:** 1 (Crítico) · **Rama base:** `develop` · **Merge:** Squash and merge · **Estado:** En progreso
 > **Detalle de hallazgos:** [../audits/security.md](../audits/security.md) · [../audits/code-quality.md](../audits/code-quality.md)
 
 ## Objetivo
@@ -16,15 +16,15 @@ git checkout -b fix/security-critical
 
 ## Hallazgos a resolver
 
-- [ ] **SEC-001** — Condición de carrera en `place_bid` (`auctions/models.py:40-45`)
-- [ ] **SEC-002** — `place_bid` acepta pujas por debajo de `starting_bid`
-- [ ] **SEC-003** — `register` omite `AUTH_PASSWORD_VALIDATORS` (`auctions/views.py:47-72`)
-- [ ] **SEC-005** — `close_auction` cambia estado en GET (`auctions/views.py:176-191`)
-- [ ] **SEC-006** — `watchlist_remove` muta estado en GET (`auctions/views.py:166-173`)
-- [ ] **SEC-007** — `logout` acepta GET (`auctions/views.py:42-44`)
-- [ ] **SEC-008** — `SECRET_KEY` con fallback hardcodeado (`commerce/settings.py:14`)
-- [ ] **SEC-011** — `login`/`register` leen `request.POST["campo"]` sin `.get()` → 500
-- [ ] **CODE-004** — `.get()` desnudos en `watchlist`/`watchlist_remove` → 500
+- [x] **SEC-001** — Condición de carrera en `place_bid` (`auctions/models.py:40-45`)
+- [x] **SEC-002** — `place_bid` acepta pujas por debajo de `starting_bid`
+- [x] **SEC-003** — `register` omite `AUTH_PASSWORD_VALIDATORS` (`auctions/views.py:47-72`)
+- [x] **SEC-005** — `close_auction` cambia estado en GET (`auctions/views.py:176-191`)
+- [x] **SEC-006** — `watchlist_remove` muta estado en GET (`auctions/views.py:166-173`)
+- [x] **SEC-007** — `logout` acepta GET (`auctions/views.py:42-44`)
+- [x] **SEC-008** — `SECRET_KEY` con fallback hardcodeado (`commerce/settings.py:14`)
+- [x] **SEC-011** — `login`/`register` leen `request.POST["campo"]` sin `.get()` → 500
+- [x] **CODE-004** — `.get()` desnudos en `watchlist`/`watchlist_remove` → 500
 
 ## Instrucciones / recomendaciones
 
@@ -84,7 +84,7 @@ fix(auctions): use get_object_or_404 and POST.get in views
 
 ## Criterios de done
 
-- [ ] Todos los checkboxes de hallazgos marcados
-- [ ] Tests nuevos verdes; cobertura ≥ 70%
+- [x] Todos los checkboxes de hallazgos marcados
+- [x] Tests nuevos verdes; cobertura ≥ 70% (82.22% local, verificado también contra PostgreSQL 16)
 - [ ] `pr-validate` en verde
 - [ ] PR a `develop` con "Squash and merge"; fila actualizada en el [tablero](README.md)

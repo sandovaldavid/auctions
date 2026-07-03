@@ -7,9 +7,10 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
-from .forms import BidForm, CommentForm, ListingForm
-from .models import Listing, User, Watchlist
+from .forms import BidForm, CommentForm, ListingForm, RegistrationForm
+from .models import Listing, Watchlist
 
 
 def index(request):
@@ -23,8 +24,8 @@ def index(request):
 def login_view(request):
     if request.method == "POST":
         # Attempt to sign user in
-        username = request.POST["username"]
-        password = request.POST["password"]
+        username = request.POST.get("username", "")
+        password = request.POST.get("password", "")
         user = authenticate(request, username=username, password=password)
 
         # Check if authentication successful
@@ -39,6 +40,7 @@ def login_view(request):
     return render(request, "auctions/login.html")
 
 
+@require_POST
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
@@ -46,29 +48,17 @@ def logout_view(request):
 
 def register(request):
     if request.method == "POST":
-        username = request.POST["username"]
-        email = request.POST["email"]
-
-        # Ensure password matches confirmation
-        password = request.POST["password"]
-        confirmation = request.POST["confirmation"]
-        if password != confirmation:
-            return render(
-                request, "auctions/register.html", {"message": "Passwords must match."}
-            )
-
-        # Attempt to create new user
-        try:
-            user = User.objects.create_user(username, email, password)
-            user.save()
-        except IntegrityError:
-            return render(
-                request,
-                "auctions/register.html",
-                {"message": "Username already taken."},
-            )
-        login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            try:
+                user = form.save()
+            except IntegrityError:
+                form.add_error("username", "Username already taken.")
+            else:
+                login(request, user)
+                return HttpResponseRedirect(reverse("index"))
+        message = " ".join(msg for errors in form.errors.values() for msg in errors)
+        return render(request, "auctions/register.html", {"message": message})
     return render(request, "auctions/register.html")
 
 
@@ -144,7 +134,7 @@ def bid(request, listing_id):
 def watchlist(request, listing_id):
     user = request.user
     if request.method == "POST":
-        current_listing = Listing.objects.get(pk=listing_id)
+        current_listing = get_object_or_404(Listing, pk=listing_id)
         watchlist_item, created = Watchlist.objects.get_or_create(
             user=user, listing=current_listing
         )
@@ -164,16 +154,18 @@ def watchlist(request, listing_id):
 
 
 @login_required
+@require_POST
 def watchlist_remove(request, listing_id):
     user = request.user
-    current_listing = Listing.objects.get(pk=listing_id)
-    watchlist_item = Watchlist.objects.get(user=user, listing=current_listing)
+    current_listing = get_object_or_404(Listing, pk=listing_id)
+    watchlist_item = get_object_or_404(Watchlist, user=user, listing=current_listing)
     watchlist_item.active = False
     watchlist_item.save()
     return HttpResponseRedirect(reverse("watchlist", args=[user.id]))
 
 
 @login_required
+@require_POST
 def close_auction(request, listing_id):
     auction_listing = get_object_or_404(Listing, id=listing_id)
 

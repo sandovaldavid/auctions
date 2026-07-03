@@ -1,9 +1,11 @@
+import threading
 from decimal import Decimal
 
 import pytest
 from django.core.exceptions import ValidationError
+from django.db import connection
 
-from auctions.models import Bid
+from auctions.models import Bid, Listing
 from tests.conftest import (
     BidFactory,
     CommentFactory,
@@ -50,6 +52,12 @@ class TestListingModel:
 
         listing.refresh_from_db()
         assert listing.current_bid == Decimal("10.00")
+
+    def test_place_bid_below_starting_bid_raises(self):
+        listing = ListingFactory(starting_bid=Decimal("10.00"), current_bid=None)
+        bidder = UserFactory()
+        with pytest.raises(ValidationError, match="at least the starting bid"):
+            listing.place_bid(user=bidder, bid_value=Decimal("5.00"))
 
     def test_place_bid_below_current_raises(self):
         listing = ListingFactory(starting_bid=Decimal("10.00"), current_bid=None)
@@ -175,3 +183,51 @@ class TestWatchlistModel:
         item = WatchlistFactory()
         assert item.user.username in str(item)
         assert item.listing.title in str(item)
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.skipif(
+    connection.vendor == "sqlite",
+    reason=(
+        "SQLite has no row-level locking, so select_for_update() cannot be "
+        "exercised meaningfully here; CI runs this against PostgreSQL."
+    ),
+)
+def test_place_bid_concurrent_bids_do_not_both_succeed():
+    """Two concurrent bids starting from the same current_bid must not both win."""
+    listing = ListingFactory(
+        starting_bid=Decimal("10.00"), current_bid=Decimal("20.00")
+    )
+    listing_id = listing.pk
+    bidder1 = UserFactory()
+    bidder2 = UserFactory()
+
+    results = []
+    barrier = threading.Barrier(2)
+
+    def place(user):
+        barrier.wait()
+        try:
+            fresh_listing = Listing.objects.get(pk=listing_id)
+            fresh_listing.place_bid(user=user, bid_value=Decimal("25.00"))
+            results.append("ok")
+        except ValidationError:
+            results.append("rejected")
+        finally:
+            connection.close()
+
+    threads = [
+        threading.Thread(target=place, args=(bidder1,)),
+        threading.Thread(target=place, args=(bidder2,)),
+    ]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+
+    assert sorted(results) == ["ok", "rejected"]
+    listing.refresh_from_db()
+    assert listing.current_bid == Decimal("25.00")
+    assert (
+        Bid.objects.filter(listing_id=listing_id, amount=Decimal("25.00")).count() == 1
+    )

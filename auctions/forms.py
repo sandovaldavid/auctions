@@ -1,9 +1,13 @@
 import re
 
 from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
 from .models import Bid, Comment, Listing
+
+User = get_user_model()
 
 
 class ListingForm(forms.ModelForm):
@@ -73,6 +77,39 @@ class BidForm(forms.ModelForm):
         if bid_value <= 0:
             raise forms.ValidationError("The bid must be greater than 0.")
         return bid_value
+
+
+class RegistrationForm(forms.Form):
+    username = forms.CharField(max_length=150)
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)
+    confirmation = forms.CharField(widget=forms.PasswordInput)
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Username already taken.")
+        return username
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirmation = cleaned_data.get("confirmation")
+        if password and confirmation and password != confirmation:
+            raise forms.ValidationError("Passwords must match.")
+        if password:
+            try:
+                validate_password(password)
+            except ValidationError as e:
+                self.add_error("password", e)
+        return cleaned_data
+
+    def save(self):
+        return User.objects.create_user(
+            username=self.cleaned_data["username"],
+            email=self.cleaned_data["email"],
+            password=self.cleaned_data["password"],
+        )
 
 
 class CommentForm(forms.ModelForm):
