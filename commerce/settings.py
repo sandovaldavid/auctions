@@ -11,9 +11,12 @@ load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.getenv("SECRET_KEY", "a-default-secret-key-for-testing-only")
-
 DEBUG = os.getenv("DEBUG", "False") == "True"
+
+if DEBUG:
+    SECRET_KEY = os.getenv("SECRET_KEY", "a-default-secret-key-for-testing-only")
+else:
+    SECRET_KEY = os.environ["SECRET_KEY"]
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 if os.getenv("DYNO"):  # Running on Heroku
@@ -72,10 +75,13 @@ TEMPLATES = [
 WSGI_APPLICATION = "commerce.wsgi.application"
 
 # Database — SQLite for local dev, PostgreSQL when DATABASE_URL is set
+# `timeout` gives concurrent writers (e.g. select_for_update() in place_bid)
+# a busy-retry window instead of failing immediately with "database is locked".
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "OPTIONS": {"timeout": 20},
     }
 }
 
