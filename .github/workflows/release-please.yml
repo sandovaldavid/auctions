@@ -2,7 +2,8 @@ name: Release Please
 
 on:
   push:
-    branches: [main, develop]
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -10,27 +11,10 @@ permissions:
 
 jobs:
   release-please:
-    name: Create release PR
     runs-on: ubuntu-latest
-    outputs:
-      release-created: ${{ steps.release.outputs.release_created }}
-      tag-name: ${{ steps.release.outputs.tag_name }}
     steps:
       - uses: googleapis/release-please-action@v4
-        id: release
         with:
-          release-type: python
-          target-branch: ${{ github.ref_name }}
-          config-file: ${{ github.ref_name == 'develop' && 'release-please-config-prerelease.json' || 'release-please-config.json' }}
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.RELEASE_PLEASE_PAT || secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-
-  post-release:
-    name: Post-release tasks
-    needs: release-please
-    if: needs.release-please.outputs.release-created == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Log release created
-        run: echo "Released ${{ needs.release-please.outputs.tag-name }}"
