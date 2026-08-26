@@ -5,16 +5,55 @@
     "context": ".."
   },
   "workspaceFolder": "/workspace",
-  "postCreateCommand": "pip install -r requirements-dev.txt && playwright install chromium --with-deps",
+  "remoteUser": "vscode",
+  "updateRemoteUserUID": true,
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2.5.9": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": false,
+      "installOhMyZshConfig": false,
+      "upgradePackages": false,
+      "username": "vscode"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1.1.0": {},
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1.10.0": {}
+  },
+  "mounts": [
+    "source=devcontainer-${localWorkspaceFolderBasename}-zsh-history,target=/commandhistory,type=volume"
+  ],
+  "containerEnv": {
+    "DEVCONTAINER": "true",
+    "ZSH_HISTORY_FILE": "/commandhistory/.zsh_history",
+    "TERM": "xterm-256color"
+  },
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+  },
+  "postCreateCommand": "bash .devcontainer/scripts/post-create.sh",
+  "postStartCommand": "bash .devcontainer/scripts/post-start.sh",
   "forwardPorts": [8000, 5432],
   "portsAttributes": {
-    "8000": { "label": "Django", "onAutoForward": "notify" },
-    "5432": { "label": "PostgreSQL", "onAutoForward": "silent" }
+    "8000": {
+      "label": "Django",
+      "protocol": "http",
+      "onAutoForward": "notify",
+      "requireLocalPort": true
+    },
+    "5432": {
+      "label": "PostgreSQL",
+      "onAutoForward": "silent",
+      "requireLocalPort": true
+    }
   },
-  "features": {
-    "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  "init": true,
+  "runArgs": ["--security-opt", "label=disable"],
+  "hostRequirements": {
+    "cpus": 2,
+    "memory": "4gb",
+    "storage": "16gb"
   },
+  "shutdownAction": "stopContainer",
   "customizations": {
     "vscode": {
       "settings": {
